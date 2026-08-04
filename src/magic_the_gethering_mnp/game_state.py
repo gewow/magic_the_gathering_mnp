@@ -17,7 +17,8 @@ def create_initial_state() -> dict:
         "graveyard": {"player_1": [], "player_2": []},
         "stack": [],
         "land_played_this_turn": False,
-        "mulligan_count": {},
+        "mulligan_count": {}, # Counts PER PLAYER how many times they mulliganed. 
+        "mulligan_kept": {}, # Added to track if both players kept their cards to start the game. 
         "_server_seq_num": 0,
     }
 
