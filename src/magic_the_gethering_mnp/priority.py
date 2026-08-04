@@ -1,4 +1,5 @@
 import constants
+import sba
 
 def start_priority_window(state: dict) -> dict:
     #active player receives priority first
@@ -40,3 +41,67 @@ def handle_stack_action(state: dict, stack_item: dict) -> dict:
 
     state["priority_holder"] = stack_item["controller"]
     return state
+
+def _is_target_legal(state, target):
+    if target in state["life_totals"]:
+        return True
+    for permanents in state["battlefield"].values():
+        if any(perm["id"] == target for perm in permanents):
+            return True
+    # A target can also be another item still on the stack (e.g.
+    # Counterspell targets a spell, not a player or permanent). This
+    # check happens AFTER the resolving item has already been popped,
+    # so state["stack"] here correctly excludes the item resolving.
+    if any(item["stack_item_id"] == target for item in state["stack"]):
+        return True
+    return False
+
+def resolve_top_of_stack(state, apply_effect_fn=None):
+    if not state["stack"]:
+        raise ValueError("resolve_top_of_stack called with an empty stack")
+
+    stack_item = state["stack"].pop()
+    targets = stack_item.get("targets", [])
+
+    # If ALL targets are illegal, the item fizzles
+    # multi-target spell with at least one still-legal target must
+    # still resolve, not fizzle. Only fizzle when NONE of the declared
+    # targets remain legal.
+    if targets:
+        legal_targets = [t for t in targets if _is_target_legal(state, t)]
+        all_illegal = len(legal_targets) == 0
+    else:
+        all_illegal = False
+
+    if targets and all_illegal:
+        result = "FIZZLE"
+        state_changes = []
+    else:
+        result = "RESOLVED"
+        state_changes = []
+        if apply_effect_fn is not None:
+            state, state_changes = apply_effect_fn(state, stack_item)
+
+    event = {
+        "stack_item_id": stack_item["stack_item_id"],
+        "result": result, 
+        "state_changes": state_changes,
+    }
+
+    return state, event
+
+def process_stack_and_sbas(state, apply_effect_fn = None):
+    state, resolve_event = resolve_top_of_stack(state, apply_effect_fn)
+    state, sba_events, game_over_event = sba.run_sba_until_stable(state)
+
+    result = {
+        "stack_resolve": resolve_event,
+        "sba_events": sba_events,
+        "game_over": game_over_event,
+        "state": state
+    }
+
+    if game_over_event is None:
+        result["next_priority_to"] = state["active_player"]
+
+    return result
