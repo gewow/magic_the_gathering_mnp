@@ -38,7 +38,7 @@ PHASE_ORDER = [
     "DECLARE_ATTACKERS",
     "DECLARE_BLOCKERS",
     "ASSIGN_DAMAGE_ORDER", #only if attacker has 2+ blocker
-    "FIRST_STRIKE__DAMAGE" #optional, only if first/double strike is present
+    "FIRST_STRIKE_DAMAGE" #optional, only if first/double strike is present
     "COMBAT_DAMAGE",
     "POSTCOMBAT_MAIN",
     "END_STEP",
