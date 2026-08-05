@@ -9,7 +9,7 @@ def copy_state(state:dict):
     newState["hands"]=dict(state["hands"])
     newState["libraries"]=dict(state["libraries"])
     newState["mulligan_count"]=dict(state["mulligan_count"])
-    newState["mulligan_kept"]=dict(state.get("mulligan_kept"), {})
+    newState["mulligan_kept"]=dict(state.get("mulligan_kept", {}))
 
     return newState
 

@@ -19,7 +19,7 @@ agrees on ONE version before other members build against it.
         game_state.py-shaped state dict (life=20, hands dealt, shuffled
         libraries, active_player chosen by coin flip).
 
-    mulligan.process_mulligan_choice(state: dict, player_id: str, keep: bool,
+    mulligan.mulligan_choice(state: dict, player_id: str, keep: bool,
                                       cards_to_bottom: list[str]) -> tuple[dict, str|None]
         Returns (updated_state, error_code_or_None).
 
@@ -97,25 +97,33 @@ def test_exactly_50_cards_accepted():
 # ---------------------------------------------------------------------------
 
 def test_duplicate_player_id_rejected():
-    lobby_state = {"ready_players": {}}
+    lobby_state = {}
     deck = ["mountain_001", "lightning_bolt_001"]
-    lobby_state, err = lobby.process_player_ready(lobby_state, "player_1", deck, FAKE_CATALOG)
+    lobby_state, err = lobby.process_player_ready(
+        lobby_state, "player_1", deck, FAKE_CATALOG, connection_id="conn_1"
+    )
     assert err is None
-    lobby_state, err = lobby.process_player_ready(lobby_state, "player_1", deck, FAKE_CATALOG)
+    lobby_state, err = lobby.process_player_ready(
+        lobby_state, "player_1", deck, FAKE_CATALOG, connection_id="conn_2"
+    )
     assert err == constants.ERROR_DUPLICATE_ID, \
-        "Second PLAYER_READY with the SAME id from a DIFFERENT connection must be rejected"
+        "Same player_id from a DIFFERENT connection must be rejected"
     print("PASS: test_duplicate_player_id_rejected")
 
 
 def test_resubmission_by_same_player_replaces_deck():
-    lobby_state = {"ready_players": {}}
+    lobby_state = {}
     deck_a = ["mountain_001"]
     deck_b = ["mountain_002", "shock_001"]
-    lobby_state, err1 = lobby.process_player_ready(lobby_state, "player_1", deck_a, FAKE_CATALOG)
-    lobby_state, err2 = lobby.process_player_ready(lobby_state, "player_1", deck_b, FAKE_CATALOG)
+    lobby_state, err1 = lobby.process_player_ready(
+        lobby_state, "player_1", deck_a, FAKE_CATALOG, connection_id="conn_1"
+    )
+    lobby_state, err2 = lobby.process_player_ready(
+        lobby_state, "player_1", deck_b, FAKE_CATALOG, connection_id="conn_1"
+    )
     assert err1 is None and err2 is None, \
-        "A player MAY resend PLAYER_READY before both are ready — must not be treated as duplicate"
-    assert lobby_state["ready_players"]["player_1"] == deck_b, \
+        "The SAME connection resending PLAYER_READY must not be treated as duplicate"
+    assert lobby_state["player_1"]["deck_list"] == deck_b, \
         "The newer deck submission must replace the older one"
     print("PASS: test_resubmission_by_same_player_replaces_deck")
 
@@ -177,7 +185,7 @@ def test_setup_coinflip_is_actually_random():
 def test_keep_with_zero_mulligans_requires_empty_bottom():
     ready = {"player_1": ["mountain_001"] * 8, "player_2": ["island_001"] * 8}
     state = setup.run_setup(ready)
-    state, err = mulligan.process_mulligan_choice(state, "player_1", keep=True,
+    state, err = mulligan.mulligan_choice(state, "player_1", keep=True,
                                                     cards_to_bottom=[])
     assert err is None
     print("PASS: test_keep_with_zero_mulligans_requires_empty_bottom")
@@ -188,7 +196,7 @@ def test_keep_with_wrong_bottom_count_rejected():
     state = setup.run_setup(ready)
     # Player has 0 mulligans so far — bottoming 1 card is illegal.
     a_card = state["hands"]["player_1"][0]
-    state, err = mulligan.process_mulligan_choice(state, "player_1", keep=True,
+    state, err = mulligan.mulligan_choice(state, "player_1", keep=True,
                                                     cards_to_bottom=[a_card])
     assert err == constants.ERROR_ILLEGAL_ACTION
     print("PASS: test_keep_with_wrong_bottom_count_rejected")
@@ -197,7 +205,7 @@ def test_keep_with_wrong_bottom_count_rejected():
 def test_mulligan_redraws_seven_and_increments_count():
     ready = {"player_1": ["mountain_001"] * 10, "player_2": ["island_001"] * 8}
     state = setup.run_setup(ready)
-    state, err = mulligan.process_mulligan_choice(state, "player_1", keep=False,
+    state, err = mulligan.mulligan_choice(state, "player_1", keep=False,
                                                     cards_to_bottom=[])
     assert err is None
     assert len(state["hands"]["player_1"]) == 7, "A mulligan redraws a fresh 7 cards"
@@ -208,9 +216,9 @@ def test_mulligan_redraws_seven_and_increments_count():
 def test_keep_after_one_mulligan_requires_exactly_one_bottomed():
     ready = {"player_1": ["mountain_001"] * 10, "player_2": ["island_001"] * 8}
     state = setup.run_setup(ready)
-    state, _ = mulligan.process_mulligan_choice(state, "player_1", keep=False, cards_to_bottom=[])
+    state, _ = mulligan.mulligan_choice(state, "player_1", keep=False, cards_to_bottom=[])
     a_card = state["hands"]["player_1"][0]
-    state, err = mulligan.process_mulligan_choice(state, "player_1", keep=True,
+    state, err = mulligan.mulligan_choice(state, "player_1", keep=True,
                                                     cards_to_bottom=[a_card])
     assert err is None, "Bottoming exactly 1 card after 1 mulligan must be accepted"
     assert len(state["hands"]["player_1"]) == 6, \
