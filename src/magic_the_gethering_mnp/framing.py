@@ -1,74 +1,66 @@
 import json
-import socket
 import struct
-
 import constants
+
+MAX_PDU_SIZE = 65535
 
 
 class FramingError(Exception):
-    """Raised when a frame can't be sent/received/parsed correctly."""
     pass
 
 
-class ConnectionClosed(Exception):
-    """Raised when the peer closed the connection (recv returned 0 bytes)."""
-    pass
+def send_pdu(sock, pdu: dict):
+    if not isinstance(pdu, dict):
+        raise FramingError("PDU must be dict")
 
+    payload = json.dumps(pdu, separators=(",", ":")).encode("utf-8")
 
-def _log(direction: str, pdu: dict, label: str = "") -> None:
-    if not constants.is_verbose():
-        return
-    tag = f"[{label}] " if label else ""
-    ptype = pdu.get("type", "?")
-    seq = pdu.get("seq_num", "?")
-    print(f"{tag}[{direction}] type={ptype} seq_num={seq} :: {pdu}")
+    if len(payload) > MAX_PDU_SIZE:
+        raise FramingError("PDU too large")
 
-
-def _recv_exact(sock: socket.socket, num_bytes: int) -> bytes:
-    chunks = []
-    remaining = num_bytes
-    while remaining > 0:
-        chunk = sock.recv(remaining)
-        if not chunk:
-            raise ConnectionClosed("Peer closed the connection")
-        chunks.append(chunk)
-        remaining -= len(chunk)
-    return b"".join(chunks)
-
-
-def send_pdu(sock: socket.socket, pdu: dict, label: str = "") -> None:
-    payload = json.dumps(pdu).encode("utf-8")
-
-    if len(payload) > constants.MAX_PDU_SIZE:
-        raise FramingError(
-            f"PDU of {len(payload)} bytes exceeds MAX_PDU_SIZE "
-            f"({constants.MAX_PDU_SIZE}); type={pdu.get('type')}"
-        )
-
-    header = struct.pack("!I", len(payload))  # "!I" = network-order unsigned int
+    header = struct.pack(">I", len(payload))
     sock.sendall(header + payload)
-    _log("SEND", pdu, label)
+
+    if constants.is_verbose():
+        print("[SEND]", pdu)
 
 
-def recv_pdu(sock: socket.socket, label: str = "") -> dict:
-    header = _recv_exact(sock, constants.LENGTH_PREFIX_BYTES)
-    (length,) = struct.unpack("!I", header)
+def recv_exact(sock, n):
+    data = b""
+    while len(data) < n:
+        chunk = sock.recv(n - len(data))
+        if not chunk:
+            raise ConnectionError("Socket closed")
+        data += chunk
+    return data
 
-    if length > constants.MAX_PDU_SIZE:
-        raise FramingError(
-            f"Incoming PDU declares {length} bytes, exceeds MAX_PDU_SIZE "
-            f"({constants.MAX_PDU_SIZE})"
-        )
 
-    raw = _recv_exact(sock, length)
+def recv_pdu(sock):
+    header = recv_exact(sock, 4)
+    length = struct.unpack(">I", header)[0]
+
+    if length == 0:
+        raise FramingError("Empty PDU")
+
+    if length > MAX_PDU_SIZE:
+        raise FramingError("PDU too large")
+
+    payload = recv_exact(sock, length)
 
     try:
-        pdu = json.loads(raw.decode("utf-8"))
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise FramingError(f"Malformed JSON payload: {exc}") from exc
+        text = payload.decode("utf-8")
+    except UnicodeDecodeError:
+        raise FramingError("Invalid UTF-8")
 
-    if not isinstance(pdu, dict):
-        raise FramingError("Decoded JSON payload is not an object")
+    try:
+        obj = json.loads(text)
+    except json.JSONDecodeError:
+        raise FramingError("Invalid JSON")
 
-    _log("RECV", pdu, label)
-    return pdu
+    if not isinstance(obj, dict):
+        raise FramingError("PDU must be JSON object")
+
+    if constants.is_verbose():
+        print("[RECV]", obj)
+
+    return obj

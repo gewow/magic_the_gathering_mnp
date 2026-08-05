@@ -60,7 +60,7 @@ def build_activate_ability(seq_num: int, source_id: str, ability_index:int, targ
 def build_declare_attackers(seq_num: int, attackers: list[dict]) -> dict:
     return {"type": "DECLARE_ATTACKERS", "seq_num": seq_num, "attackers": attackers}
 
-def buld_declare_blockers(seq_num: int, blockers: list[dict]) -> dict:
+def build_declare_blockers(seq_num: int, blockers: list[dict]) -> dict:
     return {"type": "DECLARE_BLOCKERS", "seq_num": seq_num, "blockers": blockers}
 
 def build_assign_damage_order(seq_num: int, attacker_id: str, blocker_order: list[str]) -> dict:
