@@ -35,14 +35,16 @@ PHASE_ORDER = [
     "UPKEEP",
     "DRAW",
     "PRECOMBAT_MAIN",
+    "BEGIN_COMBAT",
     "DECLARE_ATTACKERS",
     "DECLARE_BLOCKERS",
-    "ASSIGN_DAMAGE_ORDER", #only if attacker has 2+ blocker
-    "FIRST_STRIKE_DAMAGE", #optional, only if first/double strike is present
+    "ASSIGN_DAMAGE_ORDER",  # only if attacker has 2+ blockers
+    "FIRST_STRIKE_DAMAGE",  # optional, only if first/double strike is present
     "COMBAT_DAMAGE",
+    "END_OF_COMBAT",
     "POSTCOMBAT_MAIN",
     "END_STEP",
-    "CLEANUP"
+    "CLEANUP",
 ]
 
 #phases when both players can act

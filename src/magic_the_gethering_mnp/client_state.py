@@ -49,6 +49,7 @@ class MTGNPClient:
         self.pending_trigger_order: dict | None = None
         self.pending_trigger_choice: dict | None = None
         self.pending_discard = False
+        self.mulligan_submitted = False
 
         self._heartbeat_thread: threading.Thread | None = None
         self._heartbeat_stop = threading.Event()
@@ -271,10 +272,20 @@ class MTGNPClient:
         if ptype == "GAME_STATE_UPDATE":
             self.replace_state(incoming["state"])
             phase = self.state.get("phase") if self.state else None
+
+            if phase == "LOBBY":
+                self.mulligan_submitted = False
+
             if phase in ("MULLIGAN", "CLEANUP"):
                 self.action_token = incoming["seq_num"]
+
             self.render()
-            if phase == "MULLIGAN" and self.state.get("hand") is not None:
+
+            if (
+                phase == "MULLIGAN"
+                and self.state.get("hand") is not None
+                and not self.mulligan_submitted
+            ):
                 self._prompt_mulligan()
             elif self.pending_discard:
                 self._prompt_discard()
@@ -487,6 +498,7 @@ class MTGNPClient:
             )
             cards_to_bottom = [c.strip() for c in raw_bottom.split(",") if c.strip()]
         self.send_mulligan_choice(keep, cards_to_bottom)
+        self.mulligan_submitted = True
 
     def _prompt_assign_damage_order(self) -> None:
         raw_attacker = self._prompt_input("Attacker id for damage order: ")

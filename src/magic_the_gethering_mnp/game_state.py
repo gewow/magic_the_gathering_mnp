@@ -35,7 +35,11 @@ def personalize_state(state: dict, viewer_id: str) -> dict:
 
     visible = {
         "turn": state["turn"],
-        "phase": state["phase"],
+        "phase": (
+            state["phase"]
+            if state["phase_state"] == constants.IN_GAME
+            else state["phase_state"]
+        ),
         "active_player": state["active_player"],
         "priority_holder": state["priority_holder"],
         "life_totals": dict(state["life_totals"]),
