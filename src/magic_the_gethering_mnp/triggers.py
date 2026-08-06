@@ -42,7 +42,7 @@ def filter_accepted_optional_triggers(pending_triggers: list[dict], optional_res
 
 def build_trigger_push_order(state: dict, pending_triggers: list[dict], ordering_responses: dict = None) -> list[dict]:
     ap = state["active_player"]
-    nap = "plauer_2" if ap == "player_1" else "player_1"
+    nap = "player_2" if ap == "player_1" else "player_1"
 
     by_controller = {ap: [], nap: []}
     for trig in pending_triggers:
@@ -73,6 +73,6 @@ def build_trigger_push_order(state: dict, pending_triggers: list[dict], ordering
             by_id = {t["trigger_id"]: t for t in triggers_for_player}
             result.extend(by_id[tid] for tid in order)
 
-        return result
+    return result
 
 

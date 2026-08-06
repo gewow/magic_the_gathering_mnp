@@ -221,7 +221,7 @@ class MTGNPClient:
     def send_declare_blockers(self, blockers: list[dict]) -> None:
         if self.action_token is None:
             raise ValueError("No action token for declare blockers")
-        self._send(pdu.buld_declare_blockers(self.action_token, blockers))
+        self._send(pdu.build_declare_blockers(self.action_token, blockers))
 
     def send_assign_damage_order(self, attacker_id: str, blocker_order: list[str]) -> None:
         if self.action_token is None:
@@ -343,6 +343,18 @@ class MTGNPClient:
 
         elif ptype == "PONG":
             self._handle_pong(incoming)
+
+        elif ptype == "GAME_START":
+            print(f"[{self.player_id}] GAME START")
+
+            self.state = incoming.get("state", {})
+            self.current_phase = self.state.get("phase")
+
+            if "seq_num" in incoming:
+                self.action_token = incoming["seq_num"]
+
+            if self.state:
+                self.render()
 
         else:
             if self.verbose:
