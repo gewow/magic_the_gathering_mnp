@@ -6,20 +6,33 @@ lobby.py, setup.py, mulligan.py, turn_manager.py, priority.py, sba.py,
 card_effects.py, combat.py, game_state.py, pdu.py, framing.py.
 
 KNOWN SCOPE LIMITATIONS (call these out in the README):
-  - DISCARD at Cleanup (hand size > 7) is not yet enforced.
   - ASSIGN_DAMAGE_ORDER PDU is not yet requested from the client; if a
     multiply-blocked attacker occurs, damage_order defaults to
     combat.py's own fallback ordering instead of asking the player.
   - FIRST_STRIKE_DAMAGE step is always skipped (no first/double strike
-    creatures in the current card pool).
+    creatures in the current card pool). Documented deviation, not a
+    silent gap: the RFC step only matters once a first/double strike
+    creature exists, and none do yet.
   - TRIGGER_ORDER / TRIGGER_CHOICE are not yet wired in; triggers.py
     exists and is tested standalone but nothing calls detect_triggers()
     from this server loop yet.
-  - seq_num is tracked and sent on every server PDU, but incoming
-    client seq_nums are not yet validated against the priority token
-    (STALE_ACTION is not yet enforced).
+
+RESOLVED (previously listed here as scope limitations):
+  - cards.json is now generated from mtgnp_master_card_list.xlsx (312
+    card instances) and loaded as CARD_CATALOG below, instead of the
+    ~19-card hardcoded stub.
+  - seq_num is now validated against the current outstanding request
+    token for every priority-echo PDU (CAST_SPELL, ACTIVATE_ABILITY,
+    PRIORITY_PASS, PLAY_LAND, DECLARE_ATTACKERS, DECLARE_BLOCKERS),
+    plus MULLIGAN_CHOICE and DISCARD, per RFC Section 5.4. Mismatches
+    are rejected with ERROR code STALE_ACTION.
+  - DISCARD at Cleanup (hand size > 7) is now enforced per RFC 7.8:
+    the Active Player is asked to discard down to 7 cards before the
+    turn is allowed to advance to the next Untap Step.
 """
 
+import json
+import os
 import socket
 import threading
 
@@ -40,9 +53,17 @@ HOST = "0.0.0.0"
 PORT = 4444
 MAX_CLIENTS = 2
 
-# A minimal card catalog for deck validation. Replace with a real
-# cards.json load if/when one exists.
-CARD_CATALOG = {
+# ---------------------------------------------------------------------------
+# Card catalog -- loaded from cards.json (generated from
+# mtgnp_master_card_list.xlsx: 312 card instances across the full
+# W/U/B/R/G + colorless pool). Falls back to a tiny stub only if the
+# file is missing/unreadable so the server can still boot for local
+# testing, but that fallback should never be relied on for the demo.
+# ---------------------------------------------------------------------------
+
+_CARDS_JSON_PATH = os.path.join(os.path.dirname(__file__), "cards.json")
+
+_FALLBACK_CARD_CATALOG = {
     "lightning_bolt_001": {}, "lightning_bolt_002": {}, "lightning_bolt_003": {},
     "shock_001": {}, "shock_002": {}, "goblin_guide_001": {},
     "mountain_001": {}, "mountain_002": {}, "mountain_003": {}, "mountain_004": {},
@@ -50,6 +71,23 @@ CARD_CATALOG = {
     "gray_merchant_001": {}, "gray_merchant_002": {},
     "island_001": {}, "island_002": {}, "swamp_001": {}, "swamp_002": {}, "swamp_003": {},
 }
+
+
+def _load_card_catalog(path: str = _CARDS_JSON_PATH) -> dict:
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            catalog = json.load(f)
+        if not isinstance(catalog, dict) or not catalog:
+            raise ValueError("cards.json did not contain a non-empty object")
+        print(f"[SERVER] Loaded {len(catalog)} cards from {path}")
+        return catalog
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"[SERVER] WARNING: could not load {path} ({exc}); "
+              f"falling back to {len(_FALLBACK_CARD_CATALOG)}-card stub catalog")
+        return dict(_FALLBACK_CARD_CATALOG)
+
+
+CARD_CATALOG = _load_card_catalog()
 
 lock = threading.Lock()
 shutdown_event = threading.Event()
@@ -79,16 +117,25 @@ def broadcast(msg):
 
 
 def send_personalized_state_to_all():
+    """Send every connected player their own personalized
+    GAME_STATE_UPDATE. Returns {player_id: seq_num} in case a caller
+    needs to remember which seq_num a particular player was just
+    given (e.g. to set up a STALE_ACTION echo check)."""
+    seqs = {}
     for player_id in list(player_to_conn.keys()):
-        visible = game_state.personalize_state(state, player_id)
-        update = pdu.build_game_state_update(game_state.next_seq_num(state), visible)
-        send_to_player(player_id, update)
+        seqs[player_id] = send_personalized_state_to(player_id)
+    return seqs
 
 
 def send_personalized_state_to(player_id):
+    """Send one player their own personalized GAME_STATE_UPDATE.
+    Returns the seq_num used, so callers can record it as the
+    "request token" the player's next echoing PDU must match."""
+    seq = game_state.next_seq_num(state)
     visible = game_state.personalize_state(state, player_id)
-    update = pdu.build_game_state_update(game_state.next_seq_num(state), visible)
+    update = pdu.build_game_state_update(seq, visible)
     send_to_player(player_id, update)
+    return seq
 
 
 # ---------------------------------------------------------------------------
@@ -97,19 +144,112 @@ def send_personalized_state_to(player_id):
 # the right points.
 # ---------------------------------------------------------------------------
 
+def _grant_priority_to(player_id):
+    """Send PRIORITY_GRANT to player_id and record the seq_num used as
+    the current "priority token". Every priority-echo PDU (CAST_SPELL,
+    ACTIVATE_ABILITY, PRIORITY_PASS, PLAY_LAND) from this player must
+    echo this exact seq_num, per RFC Section 5.4; a mismatch is
+    rejected with STALE_ACTION."""
+    seq = game_state.next_seq_num(state)
+    grant = pdu.build_priority_grant(seq, player_id)
+    state["priority_holder"] = player_id
+    state["_priority_seq"] = seq
+    send_to_player(player_id, grant)
+    return seq
+
+
 def open_priority_window():
     global state
     state = priority.start_priority_window(state)
-    grant = pdu.build_priority_grant(game_state.next_seq_num(state), state["priority_holder"])
-    send_to_player(state["priority_holder"], grant)
+    _grant_priority_to(state["priority_holder"])
 
 
 def broadcast_phase_transition(from_phase, to_phase):
+    seq = game_state.next_seq_num(state)
     msg = pdu.build_phase_transition(
-        game_state.next_seq_num(state), from_phase, to_phase,
+        seq, from_phase, to_phase,
         state["active_player"], state["turn"]
     )
+    # DECLARE_ATTACKERS / DECLARE_BLOCKERS / ASSIGN_DAMAGE_ORDER are
+    # implicitly "requested" by the PHASE_TRANSITION that announces
+    # that step (RFC 9.3/9.4/9.5 -- "no separate request PDU is
+    # defined"), so the client echoes *this* seq_num on those PDUs.
+    state["_phase_transition_seq"] = seq
     broadcast(msg)
+
+
+# ---------------------------------------------------------------------------
+# STALE_ACTION enforcement (RFC Section 5.4 / Section 11)
+#
+# Every priority-bearing client PDU must echo the seq_num of the most
+# recent server PDU that opened the window it's responding to. Which
+# "token" applies depends on the PDU type:
+#   - "priority": CAST_SPELL, ACTIVATE_ABILITY, PRIORITY_PASS, PLAY_LAND
+#     -> must echo state["_priority_seq"] (the last PRIORITY_GRANT).
+#   - "phase_transition": DECLARE_ATTACKERS, DECLARE_BLOCKERS,
+#     ASSIGN_DAMAGE_ORDER -> must echo state["_phase_transition_seq"]
+#     (the PHASE_TRANSITION that announced that step).
+#   - "mulligan": MULLIGAN_CHOICE -> must echo
+#     state["_mulligan_request_seq"][player_id] (the GAME_STATE_UPDATE
+#     that gave that player their current hand).
+#   - "discard": DISCARD -> must echo state["_discard_request_seq"]
+#     (the cleanup-time GAME_STATE_UPDATE that asked for a discard).
+# CONCEDE and PING are exempt per RFC 5.4 and are not routed through
+# this check at all.
+# ---------------------------------------------------------------------------
+
+def _expected_seq(kind, player_id=None):
+    if kind == "priority":
+        return state.get("_priority_seq")
+    if kind == "phase_transition":
+        return state.get("_phase_transition_seq")
+    if kind == "mulligan":
+        return state.get("_mulligan_request_seq", {}).get(player_id)
+    if kind == "discard":
+        return state.get("_discard_request_seq")
+    return None
+
+
+def _check_seq(kind, player_id, msg):
+    """Returns None if msg's seq_num matches the current token for
+    `kind`; otherwise returns a human-readable mismatch description
+    suitable for an ERROR message."""
+    expected = _expected_seq(kind, player_id)
+    got = msg.get("seq_num")
+    if expected is None or got != expected:
+        return f"Priority token mismatch. Expected seq_num {expected}, got {got}."
+    return None
+
+
+def _reject_stale(conn, label, msg, reissue_priority_to=None):
+    """Send ERROR STALE_ACTION for a mismatched seq_num. Per RFC
+    Section 11.3, if the player still holds priority, the server
+    re-issues PRIORITY_GRANT with the *same* seq_num so the player can
+    retry -- we do NOT mint a new token here, since that would move
+    the goalposts on a client that's simply racing a stale message."""
+    err = pdu.build_error(
+        msg.get("seq_num", 0), constants.ERROR_STALE_ACTION,
+        f"Stale seq_num on {msg.get('type')}; action rejected.", msg,
+    )
+    send_pdu(conn, err, label=label)
+    if reissue_priority_to is not None and state.get("_priority_seq") is not None:
+        grant = pdu.build_priority_grant(state["_priority_seq"], reissue_priority_to)
+        send_pdu(conn, grant, label=label)
+
+
+def _clear_end_of_turn_state(state):
+    """RFC 7.8: at Cleanup, remove all damage from creatures and clear
+    'until end of turn' effects. Summoning sickness also clears here,
+    since by the time a creature reaches its controller's next
+    Cleanup it has already survived an Untap Step under that
+    controller."""
+    for permanents in state["battlefield"].values():
+        for perm in permanents:
+            if "damage" in perm:
+                perm["damage"] = 0
+            if "summoning_sick" in perm:
+                perm["summoning_sick"] = False
+    return state
 
 
 def advance_and_settle():
@@ -166,7 +306,29 @@ def advance_and_settle():
             open_priority_window()
             return
 
-        # UNTAP, CLEANUP -- fully automatic, no priority, no player action
+        if current == "CLEANUP":
+            ap = state["active_player"]
+            hand = state["hands"].get(ap, [])
+            if len(hand) > constants.MAX_HAND_SIZE_BEFORE_DISCARD:
+                # RFC 7.8: hand size > 7 at Cleanup -- ask the Active
+                # Player to discard down to 7 before the turn can end.
+                # The DISCARD handler re-enters advance_and_settle()
+                # once the hand is legal again.
+                seq = send_personalized_state_to(ap)
+                state["_discard_request_seq"] = seq
+                return  # wait for a DISCARD PDU
+
+            # Hand size already legal (or just brought down to legal
+            # by a completed DISCARD) -- finish Cleanup and move on.
+            state["_discard_request_seq"] = None
+            state = _clear_end_of_turn_state(state)
+            send_personalized_state_to_all()
+            from_phase = current
+            state = turn_manager.advance_phase(state)
+            broadcast_phase_transition(from_phase, state["phase"])
+            continue
+
+        # UNTAP -- fully automatic, no priority, no player action
         from_phase = current
         state = turn_manager.advance_phase(state)
         broadcast_phase_transition(from_phase, state["phase"])
@@ -324,7 +486,10 @@ def handle_client(conn, addr):
                         # Restore it into the new game state
                         state["_server_seq_num"] = old_server_seq
 
-                        send_personalized_state_to_all()
+                        # Each player's opening-hand GAME_STATE_UPDATE
+                        # is the "request token" their first
+                        # MULLIGAN_CHOICE must echo (RFC 5.4).
+                        state["_mulligan_request_seq"] = send_personalized_state_to_all()
                     continue
 
                 # -----------------------------------------------------
@@ -333,6 +498,13 @@ def handle_client(conn, addr):
                 if msg_type == "MULLIGAN_CHOICE":
                     player_id = conn_to_player.get(conn)
                     if player_id is None:
+                        continue
+
+                    seq_err = _check_seq("mulligan", player_id, msg)
+                    if seq_err:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_STALE_ACTION,
+                                               seq_err, msg)
+                        send_pdu(conn, err, label=label)
                         continue
 
                     keep = msg.get("keep")
@@ -354,8 +526,12 @@ def handle_client(conn, addr):
                         begin_first_turn()
                     else:
                         # Only the mulliganing/keeping player gets an
-                        # updated GAME_STATE_UPDATE (RFC 6.4).
-                        send_personalized_state_to(player_id)
+                        # updated GAME_STATE_UPDATE (RFC 6.4). Whatever
+                        # seq_num that update carries becomes the new
+                        # token this player's *next* MULLIGAN_CHOICE
+                        # (if any -- e.g. after a redraw) must echo.
+                        new_seq = send_personalized_state_to(player_id)
+                        state.setdefault("_mulligan_request_seq", {})[player_id] = new_seq
                     continue
 
                 # -----------------------------------------------------
@@ -379,11 +555,15 @@ def handle_client(conn, addr):
                         send_pdu(conn, err, label=label)
                         continue
 
+                    seq_err = _check_seq("priority", player_id, msg)
+                    if seq_err:
+                        _reject_stale(conn, label, msg, reissue_priority_to=player_id)
+                        continue
+
                     state, signal = priority.handle_pass(state, player_id)
 
                     if signal == "CONTINUE":
-                        grant = pdu.build_priority_grant(game_state.next_seq_num(state), state["priority_holder"])
-                        send_to_player(state["priority_holder"], grant)
+                        _grant_priority_to(state["priority_holder"])
 
                     elif signal == "STEP_END":
                         from_phase = state["phase"]
@@ -417,6 +597,11 @@ def handle_client(conn, addr):
                         send_pdu(conn, err, label=label)
                         continue
 
+                    seq_err = _check_seq("priority", player_id, msg)
+                    if seq_err:
+                        _reject_stale(conn, label, msg, reissue_priority_to=player_id)
+                        continue
+
                     card_id = msg.get("card_id")
                     targets = msg.get("targets", [])
                     stack_item = {
@@ -437,8 +622,7 @@ def handle_client(conn, addr):
                     broadcast(push_msg)
                     send_personalized_state_to_all()
 
-                    grant = pdu.build_priority_grant(game_state.next_seq_num(state), player_id)
-                    send_to_player(player_id, grant)
+                    _grant_priority_to(player_id)
                     continue
 
                 # -----------------------------------------------------
@@ -450,6 +634,12 @@ def handle_client(conn, addr):
                                               "You do not hold priority", msg)
                         send_pdu(conn, err, label=label)
                         continue
+
+                    seq_err = _check_seq("priority", player_id, msg)
+                    if seq_err:
+                        _reject_stale(conn, label, msg, reissue_priority_to=player_id)
+                        continue
+
                     if state.get("land_played_this_turn"):
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
                                               "A land has already been played this turn", msg)
@@ -468,8 +658,7 @@ def handle_client(conn, addr):
                     state["land_played_this_turn"] = True
 
                     send_personalized_state_to_all()
-                    grant = pdu.build_priority_grant(game_state.next_seq_num(state), player_id)
-                    send_to_player(player_id, grant)
+                    _grant_priority_to(player_id)
                     continue
 
                 # -----------------------------------------------------
@@ -481,6 +670,14 @@ def handle_client(conn, addr):
                                               "Only the Active Player declares attackers", msg)
                         send_pdu(conn, err, label=label)
                         continue
+
+                    seq_err = _check_seq("phase_transition", player_id, msg)
+                    if seq_err:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_STALE_ACTION,
+                                               seq_err, msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
                     new_state, err_code = combat.declare_attackers(state, msg.get("attackers", []))
                     if err_code:
                         err = pdu.build_error(msg.get("seq_num", 0), err_code, "Illegal attackers", msg)
@@ -504,6 +701,14 @@ def handle_client(conn, addr):
                                               "Only the Non-Active Player declares blockers", msg)
                         send_pdu(conn, err, label=label)
                         continue
+
+                    seq_err = _check_seq("phase_transition", player_id, msg)
+                    if seq_err:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_STALE_ACTION,
+                                               seq_err, msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
                     new_state, err_code = combat.declare_blockers(state, msg.get("blockers", []))
                     if err_code:
                         err = pdu.build_error(msg.get("seq_num", 0), err_code, "Illegal blockers", msg)
@@ -514,6 +719,55 @@ def handle_client(conn, addr):
                     from_phase = state["phase"]
                     state = turn_manager.advance_phase(state)
                     broadcast_phase_transition(from_phase, state["phase"])
+                    advance_and_settle()
+                    continue
+
+                # -----------------------------------------------------
+                # DISCARD -- Cleanup phase, hand size > 7 (RFC 7.8)
+                # -----------------------------------------------------
+                if msg_type == "DISCARD":
+                    if player_id != state.get("active_player"):
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
+                                              "Only the Active Player discards at Cleanup", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    if state.get("phase") != "CLEANUP" or state.get("_discard_request_seq") is None:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_WRONG_PHASE,
+                                              "No discard is currently pending", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    seq_err = _check_seq("discard", player_id, msg)
+                    if seq_err:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_STALE_ACTION,
+                                               seq_err, msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    card_ids = msg.get("card_ids", [])
+                    hand = state["hands"].setdefault(player_id, [])
+
+                    valid = (
+                        len(card_ids) > 0
+                        and len(card_ids) == len(set(card_ids))
+                        and all(cid in hand for cid in card_ids)
+                    )
+                    if not valid:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
+                                              "card_ids must be distinct cards from your own hand", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    for card_id in card_ids:
+                        hand.remove(card_id)
+                        state["graveyard"].setdefault(player_id, []).append(card_id)
+
+                    # RFC 7.8: broadcast the reduced hand, then either
+                    # ask again (still > 7) or finish Cleanup --
+                    # advance_and_settle() re-checks the hand size and
+                    # does the right thing either way.
+                    send_personalized_state_to_all()
                     advance_and_settle()
                     continue
 
