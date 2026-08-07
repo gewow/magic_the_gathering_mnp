@@ -24,7 +24,21 @@ def check_state_based_actions(state):
                 continue  # non-creature permanent (e.g. a land)
             damage = perm.get("damage", 0)
             toughness = perm["toughness"]
-            if toughness > 0 and damage >= toughness:
+            # if toughness > 0 and damage >= toughness:
+            #     events.append({
+            #         "type": "CREATURE_DIED",
+            #         "card_id": perm["id"],
+            #         "controller": player_id,
+            #         "reason": "LETHAL_DAMAGE",
+            #     })
+            if toughness <= 0:
+                events.append({
+                    "type": "CREATURE_DIED",
+                    "card_id": perm["id"],
+                    "controller": player_id,
+                    "reason": "ZERO_TOUGHNESS",
+                })
+            elif damage >= toughness:
                 events.append({
                     "type": "CREATURE_DIED",
                     "card_id": perm["id"],

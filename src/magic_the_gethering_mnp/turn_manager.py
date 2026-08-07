@@ -33,7 +33,14 @@ def advance_phase(state: dict) -> dict:
 
     if current_phase == "CLEANUP" and next_phase == "UNTAP":
         state["turn"] += 1
-        state["active_player"] = other_player(state["active_player"])
+        state["active_player"] = other_player(state, state["active_player"])
 
     state["phase"] = next_phase
+
+    if next_phase == "UNTAP":
+        ap = state["active_player"]
+        for perm in state["battlefield"].get(ap, []):
+            perm["tapped"] = False
+        state["land_played_this_turn"] = False
+
     return state

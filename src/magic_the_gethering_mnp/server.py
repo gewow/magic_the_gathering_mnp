@@ -57,6 +57,7 @@ import combat
 import card_effects
 import game_state
 import triggers
+import mana
 
 HOST = "0.0.0.0"
 PORT = 4444
@@ -567,6 +568,7 @@ def begin_first_turn():
     global state
     state["turn"] = 1
     state["phase"] = "UNTAP"
+    broadcast_phase_transition("MULLIGAN", "UNTAP")
     advance_and_settle()
 
 def _schedule_disconnect_timeout(player_id):
@@ -846,6 +848,37 @@ def handle_client(conn, addr):
 
                     card_id = msg.get("card_id")
                     targets = msg.get("targets", [])
+
+                    mana_payment = msg.get("mana_payment", {})
+
+                    if card_id not in state["hands"].get(player_id, []):
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION, "That card is not in your hand", msg)
+                        _reject_action(conn, label, err, player_id)
+                        continue
+                    
+                    card_type = CARD_CATALOG.get(card_id, {}).get("card_type")
+
+                    if card_type != "Instant":
+                        sorcery_speed_ok = (
+                            player_id == state.get("active_player")
+                            and state.get("phase") in ("PRECOMBAT_MAIN", "POSTCOMBAT_MAIN")
+                            and len(state["stack"]) == 0
+                        )
+                        if not sorcery_speed_ok:
+                            err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_WRONG_PHASE, 
+                                                  f"{card_id} can only be cast at sorcery speed "
+                                                  f"your Main Phase, empty stack", msg)
+                            _reject_action(conn, label, err, player_id)
+                            continue
+
+                    paid_ok, tapped = mana.validate_and_pay(state, player_id, mana_payment, CARD_CATALOG, card_id = card_id)
+                    if not paid_ok:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_INSUFFICIENT_MANA, 
+                                                  f"mana payment cannot be paid from "
+                                                  f"your untapped mana sources", msg)
+                        _reject_action(conn, label, err, player_id)
+                        continue
+                        
                     stack_item = {
                         "stack_item_id": f"stk_{game_state.next_seq_num(state)}",
                         "item_type": "SPELL",
@@ -853,8 +886,9 @@ def handle_client(conn, addr):
                         "targets": targets,
                         "controller": player_id,
                     }
-                    if player_id in state["hands"] and card_id in state["hands"][player_id]:
-                        state["hands"][player_id].remove(card_id)
+                    # if player_id in state["hands"] and card_id in state["hands"][player_id]:
+                    #     state["hands"][player_id].remove(card_id)
+                    state["hands"][player_id].remove(card_id)
 
                     state = priority.handle_stack_action(state, stack_item)
                     push_msg = pdu.build_stack_push(
@@ -882,17 +916,36 @@ def handle_client(conn, addr):
                         _reject_stale(conn, label, msg, reissue_priority_to=player_id)
                         continue
 
+                    def _reject_action(conn, label, err, player_id):
+                        send_pdu(conn, err, label=label)
+                        if state.get("priority_holder") == player_id and state.get("_priority_seq") is not None:
+                            grant = pdu.build_priority_grant(state["_priority_seq"], player_id)
+                            send_pdu(conn, grant, label=label)
+
+                    if (player_id != state.get("active_player") or state.get("phase") not in ("PRECOMBAT_MAIN", "POSTCOMBAT_MAIN")):
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_WRONG_PHASE,
+                                              "Lands can only be played by the Active Player "
+                                              "during a Main Phase", msg)
+                        _reject_action(conn, label, err, player_id)
+                        continue
+
                     if state.get("land_played_this_turn"):
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
                                               "A land has already been played this turn", msg)
-                        send_pdu(conn, err, label=label)
+                        _reject_action(conn, label, err, player_id)
                         continue
 
                     card_id = msg.get("card_id")
                     if card_id not in state["hands"].get(player_id, []):
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
                                               "That card is not in your hand", msg)
-                        send_pdu(conn, err, label=label)
+                        _reject_action(conn, label, err, player_id)
+                        continue
+
+                    if CARD_CATALOG.get(card_id, {}).get("card_type") != "Land":
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
+                                              f"{card_id} is not a Land", msg)
+                        _reject_action(conn, label, err, player_id)
                         continue
 
                     state["hands"][player_id].remove(card_id)
@@ -928,7 +981,11 @@ def handle_client(conn, addr):
                     state = new_state
                     send_personalized_state_to_all()
                     from_phase = state["phase"]
-                    state = turn_manager.advance_phase(state)
+
+                    if not combat.has_attackers(state):
+                        state["phase"] = "END_OF_COMBAT"
+                    else:
+                        state = turn_manager.advance_phase(state)
                     broadcast_phase_transition(from_phase, state["phase"])
                     advance_and_settle()
                     continue
@@ -960,8 +1017,15 @@ def handle_client(conn, addr):
                     send_personalized_state_to_all()
                     from_phase = state["phase"]
                     state = turn_manager.advance_phase(state)
-                    broadcast_phase_transition(from_phase, state["phase"])
-                    advance_and_settle()
+
+                    if combat.needs_damage_order(state):
+                        broadcast_phase_transition(from_phase, state["phase"])
+                        advance_and_settle()
+
+                    else:
+                        state = turn_manager.advance_phase(state)
+                        broadcast_phase_transition(from_phase, state["phase"])
+                        advance_and_settle()
                     continue
 
                 # -----------------------------------------------------

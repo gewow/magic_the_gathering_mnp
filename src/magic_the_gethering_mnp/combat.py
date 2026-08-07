@@ -261,7 +261,7 @@ def resolve_combat_damage(
                     continue
                 _, blocker_perm = blocker_found
                 lethal = max(blocker_perm.get("toughness", 0) - blocker_perm.get("damage", 0), 0)
-                assigned = min(remaining, lethal) if lethal > 0 else remaining
+                assigned = min(remaining, lethal) if lethal > 0 else 0
                 if assigned <= 0 and remaining > 0:
                     assigned = remaining
                 if assigned > 0:

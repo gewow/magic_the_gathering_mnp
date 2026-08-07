@@ -82,10 +82,10 @@ def build_lobby_broadcast(lobby_state, connected_player_ids):
 
     return game_state.personalize_lobby_state(players_ready, waiting_for)
 
-def process_game_over(winner_id, loser_id, reason):
-    new_message = {"type": constants.GAME_OVER, "winner_id": winner_id, "loser_id": loser_id, "reason": reason}
-    new_lobby = create_lobby_tracking()
-    new_state = game_state.create_initial_state()
+# def process_game_over(winner_id, loser_id, reason):
+#     new_message = {"type": constants.GAME_OVER, "winner_id": winner_id, "loser_id": loser_id, "reason": reason}
+#     new_lobby = create_lobby_tracking()
+#     new_state = game_state.create_initial_state()
 
-    return new_message, new_lobby, new_state
+#     return new_message, new_lobby, new_state
 

@@ -296,6 +296,12 @@ class MTGNPClient:
             if incoming["to_phase"] == "ASSIGN_DAMAGE_ORDER":
                 if self.player_id == incoming.get("active_player"):
                     self._prompt_assign_damage_order()
+            elif incoming["to_phase"] == "DECLARE_ATTACKERS":
+                if self.player_id == incoming.get("active_player"):
+                    self._prompt_declare_attackers()
+            elif incoming["to_phase"] == "DECLARE_BLOCKERS":
+                if self.player_id != incoming.get("active_player"):
+                    self._prompt_declare_blockers()
 
         elif ptype == "PRIORITY_GRANT":
             grantee = incoming["player_id"]
@@ -314,6 +320,17 @@ class MTGNPClient:
             if rejected:
                 print(f"  Rejected: {rejected}")
             if rejected and rejected.get("type") == "MULLIGAN_CHOICE" and self.action_token is not None:
+                self._prompt_mulligan()
+
+            rejected_type = rejected.get("type")
+            if rejected_type == "DECLARE_ATTACKERS":
+                self._prompt_declare_attackers()
+            elif rejected_type == "DECLARE_BLOCKERS":
+                self._prompt_declare_blockers()
+            elif rejected_type == "ASSIGN_DAMAGE_ORDER":
+                self._prompt_assign_damage_order()
+            elif rejected_type == "MULLIGAN_CHOICE":
+                self.mulligan_submitted = False
                 self._prompt_mulligan()
 
         elif ptype == "STACK_PUSH":
@@ -486,14 +503,17 @@ class MTGNPClient:
         self.send_declare_blockers(blockers)
 
     def _prompt_mulligan(self) -> None:
-<<<<<<< HEAD
-            hand = (self.state or {}).get("hand", [])
-            mulligan_count = (self.state or {}).get("mulligan_count", 0)
+        hand = (self.state or {}).get("hand", [])
+        mulligan_count=(self.state or {}).get("mulligan_count",0)
+        print(f"    Mulligan? Hand ({len(hand)}): {hand}")
 
-            print("-" * 60)
-            print(f"Mulligan decision — hand ({len(hand)} cards):")
-            for i, card_id in enumerate(hand, start=1):
-                print(f"  {i}. {card_id}")
+        if mulligan_count:
+            print(f"(Mulligan count: {mulligan_count} card(s).)")
+        raw=self._prompt_input("Keep hand? (y/n): ")
+        keep=raw.lower() in ("y", "yes", "1", "")
+        cards_to_bottom:list[str]=[]
+
+        if keep:
             if mulligan_count:
                 print(f"Already mulliganed {mulligan_count} time(s) — "
                     f"keeping requires bottoming {mulligan_count} card(s).")
@@ -514,29 +534,8 @@ class MTGNPClient:
                 )
                 cards_to_bottom = [c.strip() for c in raw_bottom.split(",") if c.strip()]
 
-            self.send_mulligan_choice(keep, cards_to_bottom)
-            self.mulligan_submitted = True
-=======
-        hand = (self.state or {}).get("hand", [])
-        mulligan_count=(self.state or {}).get("mulligan_count",0)
-        print(f"    Mulligan? Hand ({len(hand)}): {hand}")
-
-        if mulligan_count:
-            print(f"(Mulligan count: {mulligan_count} card(s).)")
-        raw=self._prompt_input("Keep hand? (y/n): ")
-        keep=raw.lower() in ("y")
-        cards_to_bottom:list[str]=[]
-
-        if keep:
-            if mulligan_count:
-                raw_bottom=self._prompt_input(f"Cards to Bottom ({mulligan_count} required, comma-separated): ", )
-            else:
-                raw_bottom=self._prompt_input("Cards to bottom (comma-separated, empty if none): ", )
-            cards_to_bottom=[c.strip() for c in raw_bottom.split(",") if c.strip()]
-
         self.send_mulligan_choice(keep,cards_to_bottom)
-        self.mulligan_submitted=True
->>>>>>> 836a127 (Fix: Bugs such as hardcoded players_id and draw)
+        self.mulligan_submitted=keep
 
     def _prompt_assign_damage_order(self) -> None:
         raw_attacker = self._prompt_input("Attacker id for damage order: ")
