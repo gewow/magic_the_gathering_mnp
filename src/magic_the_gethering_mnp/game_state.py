@@ -20,6 +20,47 @@ def create_initial_state() -> dict:
         "mulligan_count": {}, # Counts PER PLAYER how many times they mulliganed. 
         "mulligan_kept": {}, # Added to track if both players kept their cards to start the game. 
         "_server_seq_num": 0,
+
+        # --- seq_num / STALE_ACTION bookkeeping (RFC Section 5.4) ---
+        # The seq_num of the most recent PRIORITY_GRANT issued. Any
+        # priority-bearing PDU (CAST_SPELL, ACTIVATE_ABILITY,
+        # PRIORITY_PASS, PLAY_LAND, ...) from the current priority
+        # holder must echo this value.
+        "_priority_seq": None,
+        # The seq_num of the most recently broadcast PHASE_TRANSITION.
+        # DECLARE_ATTACKERS / DECLARE_BLOCKERS / ASSIGN_DAMAGE_ORDER
+        # must echo this value, since those PDUs are implicitly
+        # requested by a PHASE_TRANSITION rather than a PRIORITY_GRANT.
+        "_phase_transition_seq": None,
+        # Per-player seq_num of the most recent GAME_STATE_UPDATE sent
+        # to them during MULLIGAN (the initial hand or a post-redraw
+        # hand). MULLIGAN_CHOICE must echo the value for that player.
+        "_mulligan_request_seq": {},
+        # The seq_num of the cleanup-time GAME_STATE_UPDATE that asked
+        # the Active Player to discard down to 7 cards. None when no
+        # discard is currently pending. DISCARD must echo this value.
+        "_discard_request_seq": None,
+
+        # --- triggered-ability flow bookkeeping (RFC Section 8.6) ---
+        # Triggers currently detected and working their way through
+        # TRIGGER_ORDER / TRIGGER_CHOICE before being pushed to the
+        # stack. Cleared once the flow completes.
+        "_pending_triggers": [],
+        # player_id -> True while we're still waiting on that
+        # player's TRIGGER_ORDER_RESPONSE (only set for players who
+        # control 2+ simultaneous triggers).
+        "_trigger_order_pending": {},
+        # player_id -> seq_num of the TRIGGER_ORDER sent to them.
+        "_trigger_order_seq": {},
+        # player_id -> the ordered_trigger_ids list they supplied.
+        "_trigger_order_responses": {},
+        # trigger_id -> True while we're still waiting on that
+        # optional trigger's TRIGGER_CHOICE_RESPONSE.
+        "_trigger_choice_pending": {},
+        # trigger_id -> seq_num of the TRIGGER_CHOICE sent.
+        "_trigger_choice_seq": {},
+        # trigger_id -> accept bool the controller supplied.
+        "_trigger_choice_responses": {},
     }
 
 def next_seq_num(state: dict) -> int:

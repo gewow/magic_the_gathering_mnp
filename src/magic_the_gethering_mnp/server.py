@@ -6,16 +6,7 @@ lobby.py, setup.py, mulligan.py, turn_manager.py, priority.py, sba.py,
 card_effects.py, combat.py, game_state.py, pdu.py, framing.py.
 
 KNOWN SCOPE LIMITATIONS (call these out in the README):
-  - ASSIGN_DAMAGE_ORDER PDU is not yet requested from the client; if a
-    multiply-blocked attacker occurs, damage_order defaults to
-    combat.py's own fallback ordering instead of asking the player.
-  - FIRST_STRIKE_DAMAGE step is always skipped (no first/double strike
-    creatures in the current card pool). Documented deviation, not a
-    silent gap: the RFC step only matters once a first/double strike
-    creature exists, and none do yet.
-  - TRIGGER_ORDER / TRIGGER_CHOICE are not yet wired in; triggers.py
-    exists and is tested standalone but nothing calls detect_triggers()
-    from this server loop yet.
+  - (none remaining from the original three -- see RESOLVED below)
 
 RESOLVED (previously listed here as scope limitations):
   - cards.json is now generated from mtgnp_master_card_list.xlsx (312
@@ -23,12 +14,28 @@ RESOLVED (previously listed here as scope limitations):
     ~19-card hardcoded stub.
   - seq_num is now validated against the current outstanding request
     token for every priority-echo PDU (CAST_SPELL, ACTIVATE_ABILITY,
-    PRIORITY_PASS, PLAY_LAND, DECLARE_ATTACKERS, DECLARE_BLOCKERS),
-    plus MULLIGAN_CHOICE and DISCARD, per RFC Section 5.4. Mismatches
-    are rejected with ERROR code STALE_ACTION.
+    PRIORITY_PASS, PLAY_LAND, DECLARE_ATTACKERS, DECLARE_BLOCKERS,
+    ASSIGN_DAMAGE_ORDER), plus MULLIGAN_CHOICE and DISCARD, per RFC
+    Section 5.4. Mismatches are rejected with ERROR code STALE_ACTION.
   - DISCARD at Cleanup (hand size > 7) is now enforced per RFC 7.8:
     the Active Player is asked to discard down to 7 cards before the
     turn is allowed to advance to the next Untap Step.
+  - ASSIGN_DAMAGE_ORDER is now handled: a multiply-blocked attacker
+    makes the server wait for one ASSIGN_DAMAGE_ORDER PDU per such
+    attacker (RFC 9.5) instead of silently falling back to
+    combat.py's internal default ordering.
+  - FIRST_STRIKE_DAMAGE is still always a no-op pass-through, but this
+    is now an explicitly documented, monitored deviation (see
+    _battlefield_has_first_or_double_strike()) rather than a silent
+    gap: no card in the current pool grants first/double strike, and
+    the server logs a warning in verbose mode if that ever changes
+    without combat.py gaining real first-strike sub-resolution.
+  - TRIGGER_ORDER / TRIGGER_CHOICE are now wired into the server loop
+    (see _start_trigger_flow / _start_trigger_choices /
+    _finish_trigger_flow below): Gray Merchant of Asphodel's "you may
+    gain life" ETB trigger fires for real in a live game instead of
+    being hardcoded as an unconditional part of the creature spell's
+    own resolution.
 """
 
 import json
@@ -48,6 +55,7 @@ import sba
 import combat
 import card_effects
 import game_state
+import triggers
 
 HOST = "0.0.0.0"
 PORT = 4444
@@ -88,6 +96,13 @@ def _load_card_catalog(path: str = _CARDS_JSON_PATH) -> dict:
 
 
 CARD_CATALOG = _load_card_catalog()
+
+# Triggered-ability catalog (RFC Section 8.6), expanded from
+# card_effects.TRIGGER_DEFS_BY_BASE against every instance id in
+# CARD_CATALOG. Currently only Gray Merchant of Asphodel's ETB "you
+# may gain life" trigger is defined; adding more triggered cards is a
+# card_effects.py change only -- nothing here needs to change.
+TRIGGER_CATALOG = card_effects.build_trigger_catalog(CARD_CATALOG)
 
 lock = threading.Lock()
 shutdown_event = threading.Event()
@@ -237,6 +252,21 @@ def _reject_stale(conn, label, msg, reissue_priority_to=None):
         send_pdu(conn, grant, label=label)
 
 
+def _battlefield_has_first_or_double_strike(state) -> bool:
+    """Defensive check backing the FIRST_STRIKE_DAMAGE documented
+    deviation above: permanents don't currently carry a first_strike/
+    double_strike flag anywhere in the schema (card_effects.py's
+    creature templates never set one), so this is always False today.
+    It exists so that the day a keyword-granting card IS added, the
+    step's silent skip turns into a loud warning instead of a quiet
+    rules violation."""
+    for permanents in state.get("battlefield", {}).values():
+        for perm in permanents:
+            if perm.get("first_strike") or perm.get("double_strike"):
+                return True
+    return False
+
+
 def _clear_end_of_turn_state(state):
     """RFC 7.8: at Cleanup, remove all damage from creatures and clear
     'until end of turn' effects. Summoning sickness also clears here,
@@ -250,6 +280,118 @@ def _clear_end_of_turn_state(state):
             if "summoning_sick" in perm:
                 perm["summoning_sick"] = False
     return state
+
+
+# ---------------------------------------------------------------------------
+# Triggered abilities (RFC Section 8.6)
+#
+# Wiring: whenever a resolved stack item produces a PERMANENT_ENTERS
+# (or, in the future, other trigger-relevant) state_change, the caller
+# runs this event through _start_trigger_flow(). That either:
+#   (a) finds nothing and returns False -- caller proceeds normally
+#       (opens priority itself), or
+#   (b) finds triggers and takes over: sends TRIGGER_ORDER and/or
+#       TRIGGER_CHOICE requests and returns True, so the caller must
+#       NOT also open priority -- the flow will do that itself once
+#       every required response is in (_finish_trigger_flow).
+# ---------------------------------------------------------------------------
+
+def _start_trigger_flow(event):
+    global state
+    pending = triggers.detect_triggers(state, event, TRIGGER_CATALOG)
+    if not pending:
+        return False
+
+    state["_pending_triggers"] = pending
+
+    # RFC 8.6.2 rule 3: a player who controls 2+ simultaneous triggers
+    # must supply a TRIGGER_ORDER_RESPONSE before anything is placed
+    # on the Stack.
+    by_controller: dict[str, list[dict]] = {}
+    for trig in pending:
+        by_controller.setdefault(trig["controller"], []).append(trig)
+    needs_order = {pid: trigs for pid, trigs in by_controller.items() if len(trigs) >= 2}
+
+    if needs_order:
+        state["_trigger_order_pending"] = {}
+        for player_id, trigs in needs_order.items():
+            seq = game_state.next_seq_num(state)
+            order_req = pdu.build_trigger_order(seq, player_id, [t["trigger_id"] for t in trigs])
+            state["_trigger_order_seq"][player_id] = seq
+            state["_trigger_order_pending"][player_id] = True
+            send_to_player(player_id, order_req)
+        return True
+
+    return _start_trigger_choices()
+
+
+def _start_trigger_choices():
+    """RFC 8.6.3: send TRIGGER_CHOICE for every optional trigger and
+    wait. Assumes any needed TRIGGER_ORDER step has already completed
+    (or was never needed)."""
+    global state
+    optional = [t for t in state.get("_pending_triggers", []) if t.get("optional")]
+    if not optional:
+        return _finish_trigger_flow()
+
+    state["_trigger_choice_pending"] = {}
+    for trig in optional:
+        seq = game_state.next_seq_num(state)
+        choice_req = pdu.build_trigger_choice(
+            seq, trig["trigger_id"], trig["source_id"],
+            trig.get("effect_summary", ""), trig.get("requires_target", False), [],
+        )
+        state["_trigger_choice_seq"][trig["trigger_id"]] = seq
+        state["_trigger_choice_pending"][trig["trigger_id"]] = True
+        send_to_player(trig["controller"], choice_req)
+    return True
+
+
+def _finish_trigger_flow():
+    """All required TRIGGER_ORDER / TRIGGER_CHOICE responses are in.
+    Filters out declined optional triggers, orders the rest per RFC
+    8.6.2, pushes each surviving one onto the Stack as a
+    TRIGGER_ABILITY item (RFC 8.6.4), resets the flow's bookkeeping,
+    and opens priority -- since this is always the terminal step of a
+    trigger flow, it is responsible for opening priority itself."""
+    global state
+    pending = state.get("_pending_triggers", [])
+    accepted = triggers.filter_accepted_optional_triggers(
+        pending, state.get("_trigger_choice_responses", {})
+    )
+    ordered = triggers.build_trigger_push_order(
+        state, accepted, state.get("_trigger_order_responses", {})
+    )
+
+    for trig in ordered:
+        stack_item = {
+            "stack_item_id": f"stk_{game_state.next_seq_num(state)}",
+            "item_type": "TRIGGER_ABILITY",
+            "source": trig["source_id"],
+            "targets": [],
+            "controller": trig["controller"],
+        }
+        state["stack"].append(stack_item)
+        push_msg = pdu.build_stack_push(
+            game_state.next_seq_num(state), stack_item["stack_item_id"],
+            "TRIGGER_ABILITY", stack_item["source"], [], stack_item["controller"],
+        )
+        broadcast(push_msg)
+
+    state["_pending_triggers"] = []
+    state["_trigger_order_pending"] = {}
+    state["_trigger_order_seq"] = {}
+    state["_trigger_order_responses"] = {}
+    state["_trigger_choice_pending"] = {}
+    state["_trigger_choice_seq"] = {}
+    state["_trigger_choice_responses"] = {}
+
+    send_personalized_state_to_all()
+    # RFC 8.4/8.6: once triggers are on the Stack (or none survived
+    # to be pushed), priority opens normally, starting with the
+    # Active Player.
+    open_priority_window()
+    return True
 
 
 def advance_and_settle():
@@ -273,14 +415,45 @@ def advance_and_settle():
             return  # wait for a DECLARE_BLOCKERS PDU from the Non-Active Player
 
         if current == "ASSIGN_DAMAGE_ORDER":
-            if combat.needs_damage_order(state):
-                return  # wait for ASSIGN_DAMAGE_ORDER (not yet requested -- see file header)
-            from_phase = current
-            state = turn_manager.advance_phase(state)
-            broadcast_phase_transition(from_phase, state["phase"])
-            continue
+            if not combat.needs_damage_order(state):
+                # RFC 9.5: "If no attacker is multiply-blocked, this
+                # step is skipped" -- entirely, no priority window.
+                from_phase = current
+                state = turn_manager.advance_phase(state)
+                broadcast_phase_transition(from_phase, state["phase"])
+                continue
+
+            if not combat.has_all_damage_orders(state):
+                # RFC 9.5: implicitly requested by the PHASE_TRANSITION
+                # that announced this step (see broadcast_phase_transition
+                # / _phase_transition_seq); the Active Player owes one
+                # ASSIGN_DAMAGE_ORDER PDU per multiply-blocked attacker.
+                return
+
+            # RFC 9.5: "After all orderings have been received, the
+            # server opens a final priority window before proceeding
+            # to the damage step." Stay in this phase for that window;
+            # PRIORITY_PASS's STEP_END handling advances us onward.
+            open_priority_window()
+            return
 
         if current == "FIRST_STRIKE_DAMAGE":
+            # DOCUMENTED DEVIATION (not a silent gap): RFC 9.6 makes
+            # this step conditional on "at least one attacking or
+            # blocking creature has first strike or double strike".
+            # No card in the current MTGNP card pool grants either
+            # keyword (see cards.json / mtgnp_master_card_list.xlsx),
+            # so combat.py never assigns first-strike damage and this
+            # step is always a no-op pass-through. If a first/double
+            # strike creature is ever added to card_effects.py's
+            # creature templates, this branch must be replaced with a
+            # real first-strike damage sub-resolution before it can be
+            # trusted -- flag loudly rather than continue to skip
+            # quietly once that day comes.
+            if _battlefield_has_first_or_double_strike(state) and constants.is_verbose():
+                print("[SERVER] WARNING: a first/double strike creature is in play "
+                      "but FIRST_STRIKE_DAMAGE is still a documented no-op -- "
+                      "combat.py needs a real implementation for this step.")
             from_phase = current
             state = turn_manager.advance_phase(state)
             broadcast_phase_transition(from_phase, state["phase"])
@@ -584,7 +757,26 @@ def handle_client(conn, addr):
 
                         if check_and_handle_game_over():
                             continue
-                        open_priority_window()
+
+                        # RFC 8.6.1: after every resolution, check
+                        # whether a permanent's triggered ability just
+                        # fired (e.g. Gray Merchant's ETB "you may
+                        # gain life"). If one did, the TRIGGER_ORDER /
+                        # TRIGGER_CHOICE flow takes over priority
+                        # instead of re-opening it immediately here.
+                        trigger_flow_started = False
+                        for change in resolve_event.get("state_changes", []):
+                            if change.get("type") == "PERMANENT_ENTERS":
+                                event = {
+                                    "type": "PERMANENT_ENTERS",
+                                    "card_id": change.get("card_id"),
+                                    "controller": change.get("controller"),
+                                }
+                                if _start_trigger_flow(event):
+                                    trigger_flow_started = True
+
+                        if not trigger_flow_started:
+                            open_priority_window()
                     continue
 
                 # -----------------------------------------------------
@@ -720,6 +912,112 @@ def handle_client(conn, addr):
                     state = turn_manager.advance_phase(state)
                     broadcast_phase_transition(from_phase, state["phase"])
                     advance_and_settle()
+                    continue
+
+                # -----------------------------------------------------
+                # ASSIGN_DAMAGE_ORDER
+                # -----------------------------------------------------
+                if msg_type == "ASSIGN_DAMAGE_ORDER":
+                    if player_id != state["active_player"]:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
+                                              "Only the Active Player assigns damage order", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    seq_err = _check_seq("phase_transition", player_id, msg)
+                    if seq_err:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_STALE_ACTION,
+                                               seq_err, msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    attacker_id = msg.get("attacker_id")
+                    blocker_order = msg.get("blocker_order", [])
+                    new_state, err_code = combat.record_damage_order(state, attacker_id, blocker_order)
+                    if err_code:
+                        err = pdu.build_error(msg.get("seq_num", 0), err_code,
+                                              "Illegal ASSIGN_DAMAGE_ORDER", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+                    state = new_state
+
+                    if combat.has_all_damage_orders(state):
+                        # One PDU per multiply-blocked attacker is
+                        # expected (RFC 9.5); once every one of them
+                        # has been supplied, advance_and_settle() opens
+                        # the final priority window for this step.
+                        send_personalized_state_to_all()
+                        advance_and_settle()
+                    # else: still waiting on ordering for at least one
+                    # more multiply-blocked attacker -- no state change
+                    # to broadcast yet, no phase change.
+                    continue
+
+                # -----------------------------------------------------
+                # TRIGGER_ORDER_RESPONSE (RFC 8.6.2)
+                # -----------------------------------------------------
+                if msg_type == "TRIGGER_ORDER_RESPONSE":
+                    if player_id not in state.get("_trigger_order_pending", {}):
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
+                                              "No TRIGGER_ORDER is currently pending for you", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    expected_seq = state.get("_trigger_order_seq", {}).get(player_id)
+                    if msg.get("seq_num") != expected_seq:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_STALE_ACTION,
+                                              f"Expected seq_num {expected_seq}", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    ordered_ids = msg.get("ordered_trigger_ids", [])
+                    my_trigger_ids = [
+                        t["trigger_id"] for t in state.get("_pending_triggers", [])
+                        if t["controller"] == player_id
+                    ]
+                    if sorted(ordered_ids) != sorted(my_trigger_ids):
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_TRIGGER_ORDER_INVALID,
+                                              "ordered_trigger_ids must be exactly your simultaneous "
+                                              "triggers, each listed once", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    state["_trigger_order_responses"][player_id] = ordered_ids
+                    del state["_trigger_order_pending"][player_id]
+
+                    if not state["_trigger_order_pending"]:
+                        # All required orderings are in -- move on to
+                        # optional-trigger choices (if any), or
+                        # straight to pushing everything onto the Stack.
+                        _start_trigger_choices()
+                    continue
+
+                # -----------------------------------------------------
+                # TRIGGER_CHOICE_RESPONSE (RFC 8.6.3)
+                # -----------------------------------------------------
+                if msg_type == "TRIGGER_CHOICE_RESPONSE":
+                    trigger_id = msg.get("trigger_id")
+                    if trigger_id not in state.get("_trigger_choice_pending", {}):
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_TRIGGER_CHOICE_INVALID,
+                                              "No TRIGGER_CHOICE is currently pending for that trigger_id", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    expected_seq = state.get("_trigger_choice_seq", {}).get(trigger_id)
+                    if msg.get("seq_num") != expected_seq:
+                        err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_STALE_ACTION,
+                                              f"Expected seq_num {expected_seq}", msg)
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    accept = bool(msg.get("accept", False))
+                    state["_trigger_choice_responses"][trigger_id] = accept
+                    del state["_trigger_choice_pending"][trigger_id]
+
+                    if not state["_trigger_choice_pending"]:
+                        # Every optional trigger has an answer -- push
+                        # the accepted ones and reopen priority.
+                        _finish_trigger_flow()
                     continue
 
                 # -----------------------------------------------------

@@ -143,6 +143,50 @@ def needs_damage_order(state: dict) -> bool:
     return False
 
 
+def multiply_blocked_attacker_ids(state: dict) -> list[str]:
+    """Every attacker_id that has 2+ blockers -- i.e. every attacker
+    the Active Player owes an ASSIGN_DAMAGE_ORDER PDU for (RFC 9.5)."""
+    combat = state.get("_combat", _empty_combat())
+    return [
+        a["creature_id"] for a in combat.get("attackers", [])
+        if len(_blockers_for_attacker(combat, a["creature_id"])) >= 2
+    ]
+
+
+def has_all_damage_orders(state: dict) -> bool:
+    """True once every multiply-blocked attacker has a recorded
+    damage order. False (and thus "still waiting") when there's
+    nothing to wait for, too -- callers should pair this with
+    needs_damage_order() to distinguish "step is skipped" from "step
+    is waiting"."""
+    combat = state.get("_combat", _empty_combat())
+    needed = multiply_blocked_attacker_ids(state)
+    return all(aid in combat.get("damage_order", {}) for aid in needed)
+
+
+def record_damage_order(state: dict, attacker_id: str, blocker_order: list[str]) -> tuple[dict, str | None]:
+    """Validates and stores one ASSIGN_DAMAGE_ORDER PDU's ordering for
+    a single multiply-blocked attacker. Multiple such PDUs may arrive
+    in a row (one per multiply-blocked attacker); has_all_damage_orders()
+    tells the caller when every one of them has been supplied."""
+    combat = _ensure_combat(state)
+
+    declared_attacker_ids = {a["creature_id"] for a in combat.get("attackers", [])}
+    if attacker_id not in declared_attacker_ids:
+        return state, constants.ERROR_ILLEGAL_ACTION
+
+    blockers = set(_blockers_for_attacker(combat, attacker_id))
+    if len(blockers) < 2:
+        # Not actually a multiply-blocked attacker -- nothing to order.
+        return state, constants.ERROR_ILLEGAL_ACTION
+
+    if set(blocker_order) != blockers or len(blocker_order) != len(blockers):
+        return state, constants.ERROR_ILLEGAL_ACTION
+
+    combat["damage_order"][attacker_id] = list(blocker_order)
+    return state, None
+
+
 def _apply_damage_to_creature(state: dict, creature_id: str, amount: int) -> None:
     found = _find_permanent(state, creature_id)
     if found is None:

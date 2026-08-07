@@ -142,6 +142,13 @@ def effect_goblin_guide(state: dict, stack_item: dict) -> tuple[dict, list[dict]
 
 
 def effect_gray_merchant(state: dict, stack_item: dict) -> tuple[dict, list[dict]]:
+    """Resolves the Gray Merchant of Asphodel CREATURE SPELL: puts the
+    permanent onto the battlefield. The devotion-to-black life swing
+    is NOT applied here -- it's a separate triggered ability ("When
+    Gray Merchant enters, you may...") that fires off the
+    PERMANENT_ENTERS event this returns, and only resolves if the
+    controller accepts it via TRIGGER_CHOICE_RESPONSE. See
+    resolve_gray_merchant_trigger() below and TRIGGER_DEFS_BY_BASE."""
     card_id = stack_item.get("source")
     controller = stack_item.get("controller", stack_item.get("controller_id"))
     if not card_id or not controller:
@@ -151,13 +158,19 @@ def effect_gray_merchant(state: dict, stack_item: dict) -> tuple[dict, list[dict
     permanent = _creature_template(card_id)
     state["battlefield"][controller].append(permanent)
 
-    changes: list[dict] = [{
+    return state, [{
         "type": "PERMANENT_ENTERS",
         "card_id": card_id,
         "controller": controller,
         "tapped": False,
     }]
 
+
+def resolve_gray_merchant_trigger(state: dict, controller: str) -> tuple[dict, list[dict]]:
+    """Applies Gray Merchant's ETB life swing. Only called once the
+    controller has accepted the optional trigger (RFC 8.6.3) and the
+    resulting TRIGGER_ABILITY stack item resolves (RFC 8.6.4)."""
+    changes: list[dict] = []
     devotion = _count_black_devotion(state, controller)
     if devotion > 0:
         for player_id in state["life_totals"]:
@@ -175,7 +188,6 @@ def effect_gray_merchant(state: dict, stack_item: dict) -> tuple[dict, list[dict
                     "target": player_id,
                     "amount": devotion,
                 })
-
     return state, changes
 
 
@@ -189,9 +201,81 @@ EFFECTS: dict[str, Callable[[dict, dict], tuple[dict, list[dict]]]] = {
 
 
 def apply_card_effect(state: dict, stack_item: dict) -> tuple[dict, list[dict]]:
+    # A resolving TRIGGER_ABILITY is NOT the same effect as the spell
+    # that originally put its source permanent onto the battlefield --
+    # route it to resolve_trigger_ability() instead of re-running
+    # (say) effect_gray_merchant() a second time.
+    if stack_item.get("item_type") == "TRIGGER_ABILITY":
+        return resolve_trigger_ability(state, stack_item)
+
     source = stack_item.get("source", "")
     base = card_base_id(source)
     fn = EFFECTS.get(base)
     if fn is None:
         return state, []
     return fn(state, stack_item)
+
+
+# ---------------------------------------------------------------------------
+# Triggered abilities (RFC Section 8.6)
+#
+# Each entry in TRIGGER_DEFS_BY_BASE is keyed by BASE card id (e.g.
+# "gray_merchant") and describes one triggered ability:
+#   - condition_fn(event, permanent, state) -> bool
+#   - optional: bool -- "you may" wording; requires TRIGGER_CHOICE
+#   - requires_target: bool
+#   - effect_summary: str -- shown to the player in TRIGGER_CHOICE
+#   - resolve_fn(state, controller) -> (state, state_changes) -- the
+#     effect actually applied when the resulting TRIGGER_ABILITY stack
+#     item resolves
+#
+# triggers.detect_triggers() looks triggers up by the permanent's
+# exact instance id (e.g. "gray_merchant_003"), not the base id, so
+# build_trigger_catalog() expands this table against the full card
+# catalog once at start-up.
+# ---------------------------------------------------------------------------
+
+def _gray_merchant_etb_condition(event: dict, permanent: dict, state: dict) -> bool:
+    return event.get("type") == "PERMANENT_ENTERS" and event.get("card_id") == permanent["id"]
+
+
+TRIGGER_DEFS_BY_BASE: dict[str, list[dict]] = {
+    "gray_merchant": [{
+        "condition_fn": _gray_merchant_etb_condition,
+        "optional": True,
+        "requires_target": False,
+        "effect_summary": "You may gain life equal to your devotion to black.",
+        "resolve_fn": resolve_gray_merchant_trigger,
+    }],
+}
+
+
+def build_trigger_catalog(card_catalog: dict) -> dict:
+    """Expand TRIGGER_DEFS_BY_BASE into a full catalog keyed by every
+    concrete instance id present in card_catalog. Pass the result
+    straight to triggers.detect_triggers()."""
+    catalog: dict[str, list[dict]] = {}
+    for card_id in card_catalog:
+        defs = TRIGGER_DEFS_BY_BASE.get(card_base_id(card_id))
+        if defs:
+            catalog[card_id] = defs
+    return catalog
+
+
+def resolve_trigger_ability(state: dict, stack_item: dict) -> tuple[dict, list[dict]]:
+    """Applies a triggered ability's effect once its TRIGGER_ABILITY
+    stack item resolves (RFC 8.6.4). stack_item['source'] is the
+    permanent's instance id that generated the trigger."""
+    base = card_base_id(stack_item.get("source", ""))
+    controller = stack_item.get("controller", stack_item.get("controller_id"))
+    defs = TRIGGER_DEFS_BY_BASE.get(base)
+    if not defs or controller is None:
+        return state, []
+    # MTGNP 1.0's only triggered ability (Gray Merchant) has exactly
+    # one trigger def per base card, so use the first match; a future
+    # card with multiple distinct triggered abilities would need the
+    # stack_item to record which trigger_id/def fired.
+    resolve_fn = defs[0].get("resolve_fn")
+    if resolve_fn is None:
+        return state, []
+    return resolve_fn(state, controller)
