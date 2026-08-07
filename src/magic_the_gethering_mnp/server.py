@@ -42,6 +42,7 @@ import json
 import os
 import socket
 import threading
+import time
 
 from framing import recv_pdu, send_pdu, FramingError, ConnectionClosed
 import pdu
@@ -110,6 +111,7 @@ shutdown_event = threading.Event()
 clients = []              # list of (conn, addr)
 conn_to_player = {}        # conn -> player_id
 player_to_conn = {}        # player_id -> conn
+pending_disconnects = {}   # player_id -> {"timer": threading.Timer, "since": float}
 
 lobby_state = lobby.create_lobby_tracking()
 state = game_state.create_initial_state()   # the single authoritative game state
@@ -545,6 +547,33 @@ def begin_first_turn():
     state["turn"] = 1
     state["phase"] = "UNTAP"
     advance_and_settle()
+
+def _schedule_disconnect_timeout(player_id):
+    """Start the disconnect grace-period timer for player_id. If it
+    fires, the game ends with GAME_OVER(reason=DISCONNECT)."""
+    global pending_disconnects
+
+    def _on_timeout():
+        with lock:
+            if player_id not in pending_disconnects:
+                return
+            del pending_disconnects[player_id]
+
+            other = turn_manager.other_player(player_id)
+            if constants.is_verbose():
+                print(f"[SERVER] {player_id} did not return -- forfeiting")
+
+            msg = pdu.build_game_over(
+                game_state.next_seq_num(state), other, player_id,
+                constants.REASON_DISCONNECT,
+            )
+            broadcast(msg)
+            reset_to_lobby()
+
+    timer = threading.Timer(constants.HEARTBEAT_TIMEOUT_S, _on_timeout)
+    timer.daemon = True
+    pending_disconnects[player_id] = {"timer": timer, "since": time.time()}
+    timer.start()
 
 
 # ---------------------------------------------------------------------------
@@ -1077,14 +1106,28 @@ def handle_client(conn, addr):
                 send_pdu(conn, err, label=label)
 
     finally:
+        player_id = conn_to_player.get(conn)
         if constants.is_verbose():
-            print(f"[SERVER] Client disconnected: {addr}")
+            tag = f" (player_id={player_id})" if player_id else ""
+            print(f"[SERVER] Client disconnected: {addr}{tag}")
         conn.close()
         with lock:
             clients[:] = [c for c in clients if c[0] != conn]
             if conn in conn_to_player:
                 del conn_to_player[conn]
+            if player_id is not None and player_to_conn.get(player_id) is conn:
+                del player_to_conn[player_id]
 
+            if player_id is None:
+                pass  # never identified (dropped before PLAYER_READY) -- nothing to forfeit
+            elif state.get("phase_state") == constants.LOBBY:
+                # No game underway -- just drop their lobby seat, no
+                # GAME_OVER/forfeit semantics apply.
+                lobby_state.pop(player_id, None)
+            else:
+                # A game is underway (setup/mulligan/in-game) -- start
+                # the grace period before forfeiting on their behalf.
+                _schedule_disconnect_timeout(player_id)
 
 def start_server(verbose=False):
     constants.set_verbose(verbose)
