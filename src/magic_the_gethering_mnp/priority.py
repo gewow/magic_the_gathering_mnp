@@ -11,6 +11,7 @@ def handle_pass(state: dict, player_id: str) -> tuple[dict, str]:
     #CONTINUE - priority passed to the other player, window stays open
     #STEP_END - both players passed consecutively, stack is empty
     #RESOLVE - both players passed consecutively with stack still having items
+    others = []
 
     if player_id != state["priority_holder"]:
         raise ValueError(
@@ -18,7 +19,20 @@ def handle_pass(state: dict, player_id: str) -> tuple[dict, str]:
             f" current holder is {state['priority_holder']}"
         )
 
-    other_player = "player_2" if player_id == "player_1" else "player_1"
+    all_players = list(state["life_totals"].keys())
+
+    for p in all_players:
+        if p!= player_id:
+            others.append(p)
+
+    if len(others) != 1:
+        raise ValueError(
+            f"expected exactly one oppenent for {player_id!r}, "
+            f"found {others!r} among {all_players!r}"
+        )
+
+    other_player = others[0]
+    # other_player = "player_2" if player_id == "player_1" else "player_1"
 
     state["_pass_count"] += 1
     state["priority_holder"] = other_player

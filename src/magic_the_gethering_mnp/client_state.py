@@ -486,6 +486,7 @@ class MTGNPClient:
         self.send_declare_blockers(blockers)
 
     def _prompt_mulligan(self) -> None:
+<<<<<<< HEAD
             hand = (self.state or {}).get("hand", [])
             mulligan_count = (self.state or {}).get("mulligan_count", 0)
 
@@ -515,6 +516,27 @@ class MTGNPClient:
 
             self.send_mulligan_choice(keep, cards_to_bottom)
             self.mulligan_submitted = True
+=======
+        hand = (self.state or {}).get("hand", [])
+        mulligan_count=(self.state or {}).get("mulligan_count",0)
+        print(f"    Mulligan? Hand ({len(hand)}): {hand}")
+
+        if mulligan_count:
+            print(f"(Mulligan count: {mulligan_count} card(s).)")
+        raw=self._prompt_input("Keep hand? (y/n): ")
+        keep=raw.lower() in ("y")
+        cards_to_bottom:list[str]=[]
+
+        if keep:
+            if mulligan_count:
+                raw_bottom=self._prompt_input(f"Cards to Bottom ({mulligan_count} required, comma-separated): ", )
+            else:
+                raw_bottom=self._prompt_input("Cards to bottom (comma-separated, empty if none): ", )
+            cards_to_bottom=[c.strip() for c in raw_bottom.split(",") if c.strip()]
+
+        self.send_mulligan_choice(keep,cards_to_bottom)
+        self.mulligan_submitted=True
+>>>>>>> 836a127 (Fix: Bugs such as hardcoded players_id and draw)
 
     def _prompt_assign_damage_order(self) -> None:
         raw_attacker = self._prompt_input("Attacker id for damage order: ")

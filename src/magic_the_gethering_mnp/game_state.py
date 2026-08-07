@@ -86,7 +86,10 @@ def personalize_state(state: dict, viewer_id: str) -> dict:
         "life_totals": dict(state["life_totals"]),
         "hand": list(state["hands"].get(viewer_id, [])),
         "mulligan_count": state["mulligan_count"].get(viewer_id,0),
+<<<<<<< HEAD
         "mulligan_kept": state["mulligan_kept"].get(viewer_id, False),
+=======
+>>>>>>> 836a127 (Fix: Bugs such as hardcoded players_id and draw)
         "hand_counts": hand_counts,
         "library_counts": library_counts,
         "battlefield": {p: list(v) for p, v in state["battlefield"].items()},

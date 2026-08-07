@@ -42,7 +42,21 @@ def filter_accepted_optional_triggers(pending_triggers: list[dict], optional_res
 
 def build_trigger_push_order(state: dict, pending_triggers: list[dict], ordering_responses: dict = None) -> list[dict]:
     ap = state["active_player"]
-    nap = "player_2" if ap == "player_1" else "player_1"
+
+    others = []
+    all_players = list(state["life_totals"].keys())
+
+    for p in all_players:
+        if p!= ap:
+            others.append(p)
+
+    if len(others) != 1:
+        raise ValueError(
+            f"expected exactly one non-active player, "
+            f"found {others!r} among {all_players!r}"
+        )
+    # nap = "player_2" if ap == "player_1" else "player_1"
+    nap = others[0]
 
     by_controller = {ap: [], nap: []}
     for trig in pending_triggers:

@@ -477,6 +477,27 @@ def advance_and_settle():
             broadcast_phase_transition(from_phase, state["phase"])
             continue
 
+        if current == "DRAW":
+            if state["turn"] != 1:
+                ap = state["active_player"]
+                library = state["libraries"].get(ap, [])
+                if not library:
+                    loser = ap
+                    winner = turn_manager.other_player(state, ap)
+                    msg = pdu.build_game_over(
+                        game_state.next_seq_num(state), winner, loser,
+                        constants.REASON_DECK_EMPTY
+                    )
+                    broadcast(msg)
+                    reset_to_lobby()
+                    return
+                drawn = library.pop(0)
+                state["hands"].setdefault(ap,[]).append(drawn)
+                send_personalized_state_to(ap)
+
+            open_priority_window()
+            return
+
         if current in constants.PRIORITY_PHASES:
             open_priority_window()
             return
@@ -559,7 +580,7 @@ def _schedule_disconnect_timeout(player_id):
                 return
             del pending_disconnects[player_id]
 
-            other = turn_manager.other_player(player_id)
+            other = turn_manager.other_player(state, player_id)
             if constants.is_verbose():
                 print(f"[SERVER] {player_id} did not return -- forfeiting")
 
@@ -620,7 +641,7 @@ def handle_client(conn, addr):
                     if conceding is None:
                         continue
 
-                    winner = turn_manager.other_player(conceding)
+                    winner = turn_manager.other_player(state, conceding)
                     over = pdu.build_game_over(
                         game_state.next_seq_num(state),
                         winner,
@@ -916,7 +937,7 @@ def handle_client(conn, addr):
                 # DECLARE_BLOCKERS
                 # -----------------------------------------------------
                 if msg_type == "DECLARE_BLOCKERS":
-                    defending = turn_manager.other_player(state["active_player"])
+                    defending = turn_manager.other_player(state, state["active_player"])
                     if player_id != defending:
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
                                               "Only the Non-Active Player declares blockers", msg)

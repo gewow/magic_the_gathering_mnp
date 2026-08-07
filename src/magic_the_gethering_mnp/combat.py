@@ -36,7 +36,22 @@ def _active_player(state: dict) -> str:
 
 def _defending_player(state: dict) -> str:
     ap = _active_player(state)
-    return "player_2" if ap == "player_1" else "player_1"
+
+    others = []
+    all_players = list(state["life_totals"].keys())
+
+    for p in all_players:
+        if p!= ap:
+            others.append(p)
+
+    if len(others) != 1:
+        raise ValueError(
+            f"expected exactly one defending player, "
+            f"found {others!r} among {all_players!r}"
+        )
+    
+    # return "player_2" if ap == "player_1" else "player_1"
+    return others[0]
 
 
 def _find_permanent(state: dict, perm_id: str) -> tuple[str, dict] | None:
