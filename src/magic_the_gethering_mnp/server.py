@@ -291,6 +291,26 @@ def _reject_action(conn, label, err, player_id, state):
         grant = pdu.build_priority_grant(state["_priority_seq"], player_id)
         send_pdu(conn, grant, label=label)
 
+def _find_permanent(state, source_id):
+    """
+    Returns (controller, permanent_dict) or (None, None)
+    """
+    for player_id in ["player_1", "player_2"]:
+        battlefield = state.get(player_id, {}).get("battlefield", [])
+        for perm in battlefield:
+            if perm.get("id") == source_id:
+                return player_id, perm
+    return None, None
+
+def validate_and_pay(state, player_id, mana_cost, card_catalog, spell):
+    """
+    Temporary stub:
+    Always returns success.
+
+    Replace later with real mana validation.
+    """
+    return True, []
+
 
 # ---------------------------------------------------------------------------
 # Triggered abilities (RFC Section 8.6)
@@ -911,8 +931,8 @@ def handle_client(conn, addr):
                     _grant_priority_to(player_id)
                     continue
 
-                #ACTIVATE_ABILITY handler
-                elif msg["type"] == "ACTIVATE_ABILITY":
+                # ACTIVATE_ABILITY handler
+                elif msg_type == "ACTIVATE_ABILITY":
                     source_id = msg.get("source_id")
                     ability_index = msg.get("ability_index")
                     cost_payment = msg.get("cost_payment", {})
@@ -921,51 +941,45 @@ def handle_client(conn, addr):
                     if source_id is None or ability_index is None:
                         err = pdu.build_illegal_action("Missing source_id or ability_index")
                         _reject_action(conn, label, err, player_id, state)
-                        return
+                        continue
 
                     # find permanent 
                     controller, permanent = _find_permanent(state, source_id)
                     if not permanent:
                         err = pdu.build_illegal_action("Invalid source_id")
                         _reject_action(conn, label, err, player_id, state)
-                        return
+                        continue
 
                     # validate ability index 
                     abilities = permanent.get("abilities", [])
                     if ability_index < 0 or ability_index >= len(abilities):
                         err = pdu.build_illegal_action("Invalid ability_index")
                         _reject_action(conn, label, err, player_id, state)
-                        return
+                        continue
 
                     ability = abilities[ability_index]
 
-                    #validate tap cost 
+                    # validate tap cost 
                     if cost_payment.get("tap") and permanent.get("tapped"):
                         err = pdu.build_illegal_action("Permanent already tapped")
                         _reject_action(conn, label, err, player_id, state)
-                        return
+                        continue
 
                     # mana ability check
                     def is_mana_ability(ability):
                         return ability.get("type") == "mana"
 
                     if is_mana_ability(ability):
-                        # apply tap cost only
                         if cost_payment.get("tap"):
                             permanent["tapped"] = True
 
-                        # 🚨 no validate_and_pay
-                        # 🚨 no stack
-                        # 🚨 no priority check
+                        continue  # ✅ correct
 
-                        return
-
-                   
                     # must have priority 
                     if state.get("priority_holder") != player_id:
                         err = pdu.build_illegal_action("Player does not have priority")
                         _reject_action(conn, label, err, player_id, state)
-                        return
+                        continue   # ✅ FIXED
 
                     # validate + pay mana using your system 
                     ok, used_lands = validate_and_pay(
@@ -973,13 +987,13 @@ def handle_client(conn, addr):
                         player_id,
                         cost_payment.get("mana", {}),
                         CARD_CATALOG,
-                        None  # ability, not a spell
+                        None
                     )
 
                     if not ok:
                         err = pdu.build_illegal_action("Invalid mana payment")
                         _reject_action(conn, label, err, player_id, state)
-                        return
+                        continue   # ✅ FIXED
 
                     # apply tap cost for the source
                     if cost_payment.get("tap"):
@@ -1006,6 +1020,8 @@ def handle_client(conn, addr):
                         state["_priority_seq"] += 1
                         grant = pdu.build_priority_grant(state["_priority_seq"], next_player)
                         send_pdu(state["conns"][next_player], grant, label=f"{next_player}")
+
+                    continue   # ✅ REQUIRED
 
                 # -----------------------------------------------------
                 # PLAY_LAND
