@@ -96,6 +96,13 @@ class MTGNPClient:
             self.current_phase = phase
         if phase == "MULLIGAN":
             self.pending_discard = False
+            # Every MULLIGAN-phase update this player receives represents
+            # a fresh hand needing a fresh decision -- either the initial
+            # deal, or the redraw after a previous "n". Without this
+            # reset, mulligan_submitted stays True forever after the
+            # first answer and the client never prompts again (silent
+            # hang, not a crash).
+            self.mulligan_submitted = False
         hand = self.state.get("hand", [])
         if self.current_phase == "CLEANUP" and len(hand) > constants.MAX_HAND_SIZE_BEFORE_DISCARD:
             self.pending_discard = True
