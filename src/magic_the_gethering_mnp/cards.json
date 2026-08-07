@@ -1,0 +1,4882 @@
+{
+  "air_elemental_001": {
+    "base_id": "air_elemental",
+    "card_id": "air_elemental_001",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Flying.",
+    "mana_cost": {
+      "U": 2,
+      "generic": 3
+    },
+    "name": "Air Elemental",
+    "power": 4,
+    "subtype": "Elemental",
+    "toughness": 4
+  },
+  "air_elemental_002": {
+    "base_id": "air_elemental",
+    "card_id": "air_elemental_002",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Flying.",
+    "mana_cost": {
+      "U": 2,
+      "generic": 3
+    },
+    "name": "Air Elemental",
+    "power": 4,
+    "subtype": "Elemental",
+    "toughness": 4
+  },
+  "air_elemental_003": {
+    "base_id": "air_elemental",
+    "card_id": "air_elemental_003",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Flying.",
+    "mana_cost": {
+      "U": 2,
+      "generic": 3
+    },
+    "name": "Air Elemental",
+    "power": 4,
+    "subtype": "Elemental",
+    "toughness": 4
+  },
+  "air_elemental_004": {
+    "base_id": "air_elemental",
+    "card_id": "air_elemental_004",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Flying.",
+    "mana_cost": {
+      "U": 2,
+      "generic": 3
+    },
+    "name": "Air Elemental",
+    "power": 4,
+    "subtype": "Elemental",
+    "toughness": 4
+  },
+  "black_knight_001": {
+    "base_id": "black_knight",
+    "card_id": "black_knight_001",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "First strike. Protection from white.",
+    "mana_cost": {
+      "B": 2
+    },
+    "name": "Black Knight",
+    "power": 2,
+    "subtype": "Human Knight",
+    "toughness": 2
+  },
+  "black_knight_002": {
+    "base_id": "black_knight",
+    "card_id": "black_knight_002",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "First strike. Protection from white.",
+    "mana_cost": {
+      "B": 2
+    },
+    "name": "Black Knight",
+    "power": 2,
+    "subtype": "Human Knight",
+    "toughness": 2
+  },
+  "black_knight_003": {
+    "base_id": "black_knight",
+    "card_id": "black_knight_003",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "First strike. Protection from white.",
+    "mana_cost": {
+      "B": 2
+    },
+    "name": "Black Knight",
+    "power": 2,
+    "subtype": "Human Knight",
+    "toughness": 2
+  },
+  "black_knight_004": {
+    "base_id": "black_knight",
+    "card_id": "black_knight_004",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "First strike. Protection from white.",
+    "mana_cost": {
+      "B": 2
+    },
+    "name": "Black Knight",
+    "power": 2,
+    "subtype": "Human Knight",
+    "toughness": 2
+  },
+  "cancel_001": {
+    "base_id": "cancel",
+    "card_id": "cancel_001",
+    "card_type": "Instant",
+    "cmc": 3,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Counter target spell.",
+    "mana_cost": {
+      "U": 2,
+      "generic": 1
+    },
+    "name": "Cancel",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "cancel_002": {
+    "base_id": "cancel",
+    "card_id": "cancel_002",
+    "card_type": "Instant",
+    "cmc": 3,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Counter target spell.",
+    "mana_cost": {
+      "U": 2,
+      "generic": 1
+    },
+    "name": "Cancel",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "cancel_003": {
+    "base_id": "cancel",
+    "card_id": "cancel_003",
+    "card_type": "Instant",
+    "cmc": 3,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Counter target spell.",
+    "mana_cost": {
+      "U": 2,
+      "generic": 1
+    },
+    "name": "Cancel",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "cancel_004": {
+    "base_id": "cancel",
+    "card_id": "cancel_004",
+    "card_type": "Instant",
+    "cmc": 3,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Counter target spell.",
+    "mana_cost": {
+      "U": 2,
+      "generic": 1
+    },
+    "name": "Cancel",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "counterspell_001": {
+    "base_id": "counterspell",
+    "card_id": "counterspell_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Counter target spell.",
+    "mana_cost": {
+      "U": 2
+    },
+    "name": "Counterspell",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "counterspell_002": {
+    "base_id": "counterspell",
+    "card_id": "counterspell_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Counter target spell.",
+    "mana_cost": {
+      "U": 2
+    },
+    "name": "Counterspell",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "counterspell_003": {
+    "base_id": "counterspell",
+    "card_id": "counterspell_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Counter target spell.",
+    "mana_cost": {
+      "U": 2
+    },
+    "name": "Counterspell",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "counterspell_004": {
+    "base_id": "counterspell",
+    "card_id": "counterspell_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Counter target spell.",
+    "mana_cost": {
+      "U": 2
+    },
+    "name": "Counterspell",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "dark_ritual_001": {
+    "base_id": "dark_ritual",
+    "card_id": "dark_ritual_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "Add {B}{B}{B}.",
+    "mana_cost": {
+      "B": 1
+    },
+    "name": "Dark Ritual",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "dark_ritual_002": {
+    "base_id": "dark_ritual",
+    "card_id": "dark_ritual_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "Add {B}{B}{B}.",
+    "mana_cost": {
+      "B": 1
+    },
+    "name": "Dark Ritual",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "dark_ritual_003": {
+    "base_id": "dark_ritual",
+    "card_id": "dark_ritual_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "Add {B}{B}{B}.",
+    "mana_cost": {
+      "B": 1
+    },
+    "name": "Dark Ritual",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "dark_ritual_004": {
+    "base_id": "dark_ritual",
+    "card_id": "dark_ritual_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "Add {B}{B}{B}.",
+    "mana_cost": {
+      "B": 1
+    },
+    "name": "Dark Ritual",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "doom_blade_001": {
+    "base_id": "doom_blade",
+    "card_id": "doom_blade_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "Destroy target nonblack creature.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 1
+    },
+    "name": "Doom Blade",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "doom_blade_002": {
+    "base_id": "doom_blade",
+    "card_id": "doom_blade_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "Destroy target nonblack creature.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 1
+    },
+    "name": "Doom Blade",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "doom_blade_003": {
+    "base_id": "doom_blade",
+    "card_id": "doom_blade_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "Destroy target nonblack creature.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 1
+    },
+    "name": "Doom Blade",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "doom_blade_004": {
+    "base_id": "doom_blade",
+    "card_id": "doom_blade_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "Destroy target nonblack creature.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 1
+    },
+    "name": "Doom Blade",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "elvish_mystic_001": {
+    "base_id": "elvish_mystic",
+    "card_id": "elvish_mystic_001",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Elvish Mystic",
+    "power": 1,
+    "subtype": "Elf Druid",
+    "toughness": 1
+  },
+  "elvish_mystic_002": {
+    "base_id": "elvish_mystic",
+    "card_id": "elvish_mystic_002",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Elvish Mystic",
+    "power": 1,
+    "subtype": "Elf Druid",
+    "toughness": 1
+  },
+  "elvish_mystic_003": {
+    "base_id": "elvish_mystic",
+    "card_id": "elvish_mystic_003",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Elvish Mystic",
+    "power": 1,
+    "subtype": "Elf Druid",
+    "toughness": 1
+  },
+  "elvish_mystic_004": {
+    "base_id": "elvish_mystic",
+    "card_id": "elvish_mystic_004",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Elvish Mystic",
+    "power": 1,
+    "subtype": "Elf Druid",
+    "toughness": 1
+  },
+  "flame_slash_001": {
+    "base_id": "flame_slash",
+    "card_id": "flame_slash_001",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Flame Slash deals 4 damage to target creature.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Flame Slash",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "flame_slash_002": {
+    "base_id": "flame_slash",
+    "card_id": "flame_slash_002",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Flame Slash deals 4 damage to target creature.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Flame Slash",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "flame_slash_003": {
+    "base_id": "flame_slash",
+    "card_id": "flame_slash_003",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Flame Slash deals 4 damage to target creature.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Flame Slash",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "flame_slash_004": {
+    "base_id": "flame_slash",
+    "card_id": "flame_slash_004",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Flame Slash deals 4 damage to target creature.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Flame Slash",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "forest_001": {
+    "base_id": "forest",
+    "card_id": "forest_001",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_002": {
+    "base_id": "forest",
+    "card_id": "forest_002",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_003": {
+    "base_id": "forest",
+    "card_id": "forest_003",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_004": {
+    "base_id": "forest",
+    "card_id": "forest_004",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_005": {
+    "base_id": "forest",
+    "card_id": "forest_005",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 5,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_006": {
+    "base_id": "forest",
+    "card_id": "forest_006",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 6,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_007": {
+    "base_id": "forest",
+    "card_id": "forest_007",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 7,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_008": {
+    "base_id": "forest",
+    "card_id": "forest_008",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 8,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_009": {
+    "base_id": "forest",
+    "card_id": "forest_009",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 9,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_010": {
+    "base_id": "forest",
+    "card_id": "forest_010",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 10,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_011": {
+    "base_id": "forest",
+    "card_id": "forest_011",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 11,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_012": {
+    "base_id": "forest",
+    "card_id": "forest_012",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 12,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_013": {
+    "base_id": "forest",
+    "card_id": "forest_013",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 13,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_014": {
+    "base_id": "forest",
+    "card_id": "forest_014",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 14,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_015": {
+    "base_id": "forest",
+    "card_id": "forest_015",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 15,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_016": {
+    "base_id": "forest",
+    "card_id": "forest_016",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 16,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_017": {
+    "base_id": "forest",
+    "card_id": "forest_017",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 17,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_018": {
+    "base_id": "forest",
+    "card_id": "forest_018",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 18,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_019": {
+    "base_id": "forest",
+    "card_id": "forest_019",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 19,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "forest_020": {
+    "base_id": "forest",
+    "card_id": "forest_020",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "G",
+    "copy_number": 20,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {},
+    "name": "Forest",
+    "power": null,
+    "subtype": "Basic Forest",
+    "toughness": null
+  },
+  "giant_growth_001": {
+    "base_id": "giant_growth",
+    "card_id": "giant_growth_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "Target creature gets +3/+3 until end of turn.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Giant Growth",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "giant_growth_002": {
+    "base_id": "giant_growth",
+    "card_id": "giant_growth_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "Target creature gets +3/+3 until end of turn.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Giant Growth",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "giant_growth_003": {
+    "base_id": "giant_growth",
+    "card_id": "giant_growth_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "Target creature gets +3/+3 until end of turn.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Giant Growth",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "giant_growth_004": {
+    "base_id": "giant_growth",
+    "card_id": "giant_growth_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "Target creature gets +3/+3 until end of turn.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Giant Growth",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "goblin_bushwhacker_001": {
+    "base_id": "goblin_bushwhacker",
+    "card_id": "goblin_bushwhacker_001",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Kicker {1}{R}. When this enters, if it was kicked, creatures you control get +1/+0 and gain haste until end of turn.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Goblin Bushwhacker",
+    "power": 1,
+    "subtype": "Goblin Warrior",
+    "toughness": 1
+  },
+  "goblin_bushwhacker_002": {
+    "base_id": "goblin_bushwhacker",
+    "card_id": "goblin_bushwhacker_002",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Kicker {1}{R}. When this enters, if it was kicked, creatures you control get +1/+0 and gain haste until end of turn.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Goblin Bushwhacker",
+    "power": 1,
+    "subtype": "Goblin Warrior",
+    "toughness": 1
+  },
+  "goblin_bushwhacker_003": {
+    "base_id": "goblin_bushwhacker",
+    "card_id": "goblin_bushwhacker_003",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Kicker {1}{R}. When this enters, if it was kicked, creatures you control get +1/+0 and gain haste until end of turn.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Goblin Bushwhacker",
+    "power": 1,
+    "subtype": "Goblin Warrior",
+    "toughness": 1
+  },
+  "goblin_bushwhacker_004": {
+    "base_id": "goblin_bushwhacker",
+    "card_id": "goblin_bushwhacker_004",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Kicker {1}{R}. When this enters, if it was kicked, creatures you control get +1/+0 and gain haste until end of turn.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Goblin Bushwhacker",
+    "power": 1,
+    "subtype": "Goblin Warrior",
+    "toughness": 1
+  },
+  "goblin_guide_001": {
+    "base_id": "goblin_guide",
+    "card_id": "goblin_guide_001",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Haste. Whenever Goblin Guide attacks, defending player reveals top card of library. If it's a land, that player puts it into their hand.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Goblin Guide",
+    "power": 2,
+    "subtype": "Goblin Scout",
+    "toughness": 2
+  },
+  "goblin_guide_002": {
+    "base_id": "goblin_guide",
+    "card_id": "goblin_guide_002",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Haste. Whenever Goblin Guide attacks, defending player reveals top card of library. If it's a land, that player puts it into their hand.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Goblin Guide",
+    "power": 2,
+    "subtype": "Goblin Scout",
+    "toughness": 2
+  },
+  "goblin_guide_003": {
+    "base_id": "goblin_guide",
+    "card_id": "goblin_guide_003",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Haste. Whenever Goblin Guide attacks, defending player reveals top card of library. If it's a land, that player puts it into their hand.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Goblin Guide",
+    "power": 2,
+    "subtype": "Goblin Scout",
+    "toughness": 2
+  },
+  "goblin_guide_004": {
+    "base_id": "goblin_guide",
+    "card_id": "goblin_guide_004",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Haste. Whenever Goblin Guide attacks, defending player reveals top card of library. If it's a land, that player puts it into their hand.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Goblin Guide",
+    "power": 2,
+    "subtype": "Goblin Scout",
+    "toughness": 2
+  },
+  "gravedigger_001": {
+    "base_id": "gravedigger",
+    "card_id": "gravedigger_001",
+    "card_type": "Creature",
+    "cmc": 4,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "When Gravedigger enters, return target creature card from your graveyard to your hand.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 3
+    },
+    "name": "Gravedigger",
+    "power": 2,
+    "subtype": "Zombie",
+    "toughness": 2
+  },
+  "gravedigger_002": {
+    "base_id": "gravedigger",
+    "card_id": "gravedigger_002",
+    "card_type": "Creature",
+    "cmc": 4,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "When Gravedigger enters, return target creature card from your graveyard to your hand.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 3
+    },
+    "name": "Gravedigger",
+    "power": 2,
+    "subtype": "Zombie",
+    "toughness": 2
+  },
+  "gravedigger_003": {
+    "base_id": "gravedigger",
+    "card_id": "gravedigger_003",
+    "card_type": "Creature",
+    "cmc": 4,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "When Gravedigger enters, return target creature card from your graveyard to your hand.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 3
+    },
+    "name": "Gravedigger",
+    "power": 2,
+    "subtype": "Zombie",
+    "toughness": 2
+  },
+  "gravedigger_004": {
+    "base_id": "gravedigger",
+    "card_id": "gravedigger_004",
+    "card_type": "Creature",
+    "cmc": 4,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "When Gravedigger enters, return target creature card from your graveyard to your hand.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 3
+    },
+    "name": "Gravedigger",
+    "power": 2,
+    "subtype": "Zombie",
+    "toughness": 2
+  },
+  "gray_merchant_001": {
+    "base_id": "gray_merchant",
+    "card_id": "gray_merchant_001",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "When Gray Merchant enters, each opponent loses X life (X = your devotion to black). You gain that much life.",
+    "mana_cost": {
+      "B": 2,
+      "generic": 3
+    },
+    "name": "Gray Merchant of Asphodel",
+    "power": 2,
+    "subtype": "Zombie",
+    "toughness": 4
+  },
+  "gray_merchant_002": {
+    "base_id": "gray_merchant",
+    "card_id": "gray_merchant_002",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "When Gray Merchant enters, each opponent loses X life (X = your devotion to black). You gain that much life.",
+    "mana_cost": {
+      "B": 2,
+      "generic": 3
+    },
+    "name": "Gray Merchant of Asphodel",
+    "power": 2,
+    "subtype": "Zombie",
+    "toughness": 4
+  },
+  "gray_merchant_003": {
+    "base_id": "gray_merchant",
+    "card_id": "gray_merchant_003",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "When Gray Merchant enters, each opponent loses X life (X = your devotion to black). You gain that much life.",
+    "mana_cost": {
+      "B": 2,
+      "generic": 3
+    },
+    "name": "Gray Merchant of Asphodel",
+    "power": 2,
+    "subtype": "Zombie",
+    "toughness": 4
+  },
+  "gray_merchant_004": {
+    "base_id": "gray_merchant",
+    "card_id": "gray_merchant_004",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "When Gray Merchant enters, each opponent loses X life (X = your devotion to black). You gain that much life.",
+    "mana_cost": {
+      "B": 2,
+      "generic": 3
+    },
+    "name": "Gray Merchant of Asphodel",
+    "power": 2,
+    "subtype": "Zombie",
+    "toughness": 4
+  },
+  "grizzly_bears_001": {
+    "base_id": "grizzly_bears",
+    "card_id": "grizzly_bears_001",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Grizzly Bears",
+    "power": 2,
+    "subtype": "Bear",
+    "toughness": 2
+  },
+  "grizzly_bears_002": {
+    "base_id": "grizzly_bears",
+    "card_id": "grizzly_bears_002",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Grizzly Bears",
+    "power": 2,
+    "subtype": "Bear",
+    "toughness": 2
+  },
+  "grizzly_bears_003": {
+    "base_id": "grizzly_bears",
+    "card_id": "grizzly_bears_003",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Grizzly Bears",
+    "power": 2,
+    "subtype": "Bear",
+    "toughness": 2
+  },
+  "grizzly_bears_004": {
+    "base_id": "grizzly_bears",
+    "card_id": "grizzly_bears_004",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Grizzly Bears",
+    "power": 2,
+    "subtype": "Bear",
+    "toughness": 2
+  },
+  "healing_salve_001": {
+    "base_id": "healing_salve",
+    "card_id": "healing_salve_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "Choose one: Target player gains 3 life; or prevent the next 3 damage dealt to any target this turn.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Healing Salve",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "healing_salve_002": {
+    "base_id": "healing_salve",
+    "card_id": "healing_salve_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "Choose one: Target player gains 3 life; or prevent the next 3 damage dealt to any target this turn.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Healing Salve",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "healing_salve_003": {
+    "base_id": "healing_salve",
+    "card_id": "healing_salve_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "Choose one: Target player gains 3 life; or prevent the next 3 damage dealt to any target this turn.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Healing Salve",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "healing_salve_004": {
+    "base_id": "healing_salve",
+    "card_id": "healing_salve_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "Choose one: Target player gains 3 life; or prevent the next 3 damage dealt to any target this turn.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Healing Salve",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "incinerate_001": {
+    "base_id": "incinerate",
+    "card_id": "incinerate_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Incinerate deals 3 damage to any target. The damaged permanent or player can't be regenerated this turn.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Incinerate",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "incinerate_002": {
+    "base_id": "incinerate",
+    "card_id": "incinerate_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Incinerate deals 3 damage to any target. The damaged permanent or player can't be regenerated this turn.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Incinerate",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "incinerate_003": {
+    "base_id": "incinerate",
+    "card_id": "incinerate_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Incinerate deals 3 damage to any target. The damaged permanent or player can't be regenerated this turn.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Incinerate",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "incinerate_004": {
+    "base_id": "incinerate",
+    "card_id": "incinerate_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Incinerate deals 3 damage to any target. The damaged permanent or player can't be regenerated this turn.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Incinerate",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "island_001": {
+    "base_id": "island",
+    "card_id": "island_001",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_002": {
+    "base_id": "island",
+    "card_id": "island_002",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_003": {
+    "base_id": "island",
+    "card_id": "island_003",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_004": {
+    "base_id": "island",
+    "card_id": "island_004",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_005": {
+    "base_id": "island",
+    "card_id": "island_005",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 5,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_006": {
+    "base_id": "island",
+    "card_id": "island_006",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 6,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_007": {
+    "base_id": "island",
+    "card_id": "island_007",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 7,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_008": {
+    "base_id": "island",
+    "card_id": "island_008",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 8,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_009": {
+    "base_id": "island",
+    "card_id": "island_009",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 9,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_010": {
+    "base_id": "island",
+    "card_id": "island_010",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 10,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_011": {
+    "base_id": "island",
+    "card_id": "island_011",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 11,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_012": {
+    "base_id": "island",
+    "card_id": "island_012",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 12,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_013": {
+    "base_id": "island",
+    "card_id": "island_013",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 13,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_014": {
+    "base_id": "island",
+    "card_id": "island_014",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 14,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_015": {
+    "base_id": "island",
+    "card_id": "island_015",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 15,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_016": {
+    "base_id": "island",
+    "card_id": "island_016",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 16,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_017": {
+    "base_id": "island",
+    "card_id": "island_017",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 17,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_018": {
+    "base_id": "island",
+    "card_id": "island_018",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 18,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_019": {
+    "base_id": "island",
+    "card_id": "island_019",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 19,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "island_020": {
+    "base_id": "island",
+    "card_id": "island_020",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "U",
+    "copy_number": 20,
+    "effect": "Tap: Add {U}.",
+    "mana_cost": {},
+    "name": "Island",
+    "power": null,
+    "subtype": "Basic Island",
+    "toughness": null
+  },
+  "lava_spike_001": {
+    "base_id": "lava_spike",
+    "card_id": "lava_spike_001",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Lava Spike deals 3 damage to target player.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Lava Spike",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "lava_spike_002": {
+    "base_id": "lava_spike",
+    "card_id": "lava_spike_002",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Lava Spike deals 3 damage to target player.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Lava Spike",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "lava_spike_003": {
+    "base_id": "lava_spike",
+    "card_id": "lava_spike_003",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Lava Spike deals 3 damage to target player.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Lava Spike",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "lava_spike_004": {
+    "base_id": "lava_spike",
+    "card_id": "lava_spike_004",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Lava Spike deals 3 damage to target player.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Lava Spike",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "leatherback_baloth_001": {
+    "base_id": "leatherback_baloth",
+    "card_id": "leatherback_baloth_001",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "G": 3
+    },
+    "name": "Leatherback Baloth",
+    "power": 4,
+    "subtype": "Beast",
+    "toughness": 5
+  },
+  "leatherback_baloth_002": {
+    "base_id": "leatherback_baloth",
+    "card_id": "leatherback_baloth_002",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "G": 3
+    },
+    "name": "Leatherback Baloth",
+    "power": 4,
+    "subtype": "Beast",
+    "toughness": 5
+  },
+  "leatherback_baloth_003": {
+    "base_id": "leatherback_baloth",
+    "card_id": "leatherback_baloth_003",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "G": 3
+    },
+    "name": "Leatherback Baloth",
+    "power": 4,
+    "subtype": "Beast",
+    "toughness": 5
+  },
+  "leatherback_baloth_004": {
+    "base_id": "leatherback_baloth",
+    "card_id": "leatherback_baloth_004",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "G": 3
+    },
+    "name": "Leatherback Baloth",
+    "power": 4,
+    "subtype": "Beast",
+    "toughness": 5
+  },
+  "lightning_bolt_001": {
+    "base_id": "lightning_bolt",
+    "card_id": "lightning_bolt_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Lightning Bolt deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Lightning Bolt",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "lightning_bolt_002": {
+    "base_id": "lightning_bolt",
+    "card_id": "lightning_bolt_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Lightning Bolt deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Lightning Bolt",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "lightning_bolt_003": {
+    "base_id": "lightning_bolt",
+    "card_id": "lightning_bolt_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Lightning Bolt deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Lightning Bolt",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "lightning_bolt_004": {
+    "base_id": "lightning_bolt",
+    "card_id": "lightning_bolt_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Lightning Bolt deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Lightning Bolt",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "llanowar_elves_001": {
+    "base_id": "llanowar_elves",
+    "card_id": "llanowar_elves_001",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Llanowar Elves",
+    "power": 1,
+    "subtype": "Elf Druid",
+    "toughness": 1
+  },
+  "llanowar_elves_002": {
+    "base_id": "llanowar_elves",
+    "card_id": "llanowar_elves_002",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Llanowar Elves",
+    "power": 1,
+    "subtype": "Elf Druid",
+    "toughness": 1
+  },
+  "llanowar_elves_003": {
+    "base_id": "llanowar_elves",
+    "card_id": "llanowar_elves_003",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Llanowar Elves",
+    "power": 1,
+    "subtype": "Elf Druid",
+    "toughness": 1
+  },
+  "llanowar_elves_004": {
+    "base_id": "llanowar_elves",
+    "card_id": "llanowar_elves_004",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "Tap: Add {G}.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Llanowar Elves",
+    "power": 1,
+    "subtype": "Elf Druid",
+    "toughness": 1
+  },
+  "mana_leak_001": {
+    "base_id": "mana_leak",
+    "card_id": "mana_leak_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Counter target spell unless its controller pays {3}.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Mana Leak",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "mana_leak_002": {
+    "base_id": "mana_leak",
+    "card_id": "mana_leak_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Counter target spell unless its controller pays {3}.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Mana Leak",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "mana_leak_003": {
+    "base_id": "mana_leak",
+    "card_id": "mana_leak_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Counter target spell unless its controller pays {3}.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Mana Leak",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "mana_leak_004": {
+    "base_id": "mana_leak",
+    "card_id": "mana_leak_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Counter target spell unless its controller pays {3}.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Mana Leak",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "merfolk_looter_001": {
+    "base_id": "merfolk_looter",
+    "card_id": "merfolk_looter_001",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Tap: Draw a card, then discard a card.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Merfolk Looter",
+    "power": 1,
+    "subtype": "Merfolk Rogue",
+    "toughness": 1
+  },
+  "merfolk_looter_002": {
+    "base_id": "merfolk_looter",
+    "card_id": "merfolk_looter_002",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Tap: Draw a card, then discard a card.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Merfolk Looter",
+    "power": 1,
+    "subtype": "Merfolk Rogue",
+    "toughness": 1
+  },
+  "merfolk_looter_003": {
+    "base_id": "merfolk_looter",
+    "card_id": "merfolk_looter_003",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Tap: Draw a card, then discard a card.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Merfolk Looter",
+    "power": 1,
+    "subtype": "Merfolk Rogue",
+    "toughness": 1
+  },
+  "merfolk_looter_004": {
+    "base_id": "merfolk_looter",
+    "card_id": "merfolk_looter_004",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Tap: Draw a card, then discard a card.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Merfolk Looter",
+    "power": 1,
+    "subtype": "Merfolk Rogue",
+    "toughness": 1
+  },
+  "millstone_001": {
+    "base_id": "millstone",
+    "card_id": "millstone_001",
+    "card_type": "Artifact",
+    "cmc": 2,
+    "color": "C",
+    "copy_number": 1,
+    "effect": "{2}, Tap: Target player mills 2 cards (puts top 2 cards of their library into their graveyard).",
+    "mana_cost": {
+      "generic": 2
+    },
+    "name": "Millstone",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "millstone_002": {
+    "base_id": "millstone",
+    "card_id": "millstone_002",
+    "card_type": "Artifact",
+    "cmc": 2,
+    "color": "C",
+    "copy_number": 2,
+    "effect": "{2}, Tap: Target player mills 2 cards (puts top 2 cards of their library into their graveyard).",
+    "mana_cost": {
+      "generic": 2
+    },
+    "name": "Millstone",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "millstone_003": {
+    "base_id": "millstone",
+    "card_id": "millstone_003",
+    "card_type": "Artifact",
+    "cmc": 2,
+    "color": "C",
+    "copy_number": 3,
+    "effect": "{2}, Tap: Target player mills 2 cards (puts top 2 cards of their library into their graveyard).",
+    "mana_cost": {
+      "generic": 2
+    },
+    "name": "Millstone",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "millstone_004": {
+    "base_id": "millstone",
+    "card_id": "millstone_004",
+    "card_type": "Artifact",
+    "cmc": 2,
+    "color": "C",
+    "copy_number": 4,
+    "effect": "{2}, Tap: Target player mills 2 cards (puts top 2 cards of their library into their graveyard).",
+    "mana_cost": {
+      "generic": 2
+    },
+    "name": "Millstone",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "mind_rot_001": {
+    "base_id": "mind_rot",
+    "card_id": "mind_rot_001",
+    "card_type": "Sorcery",
+    "cmc": 3,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "Target player discards two cards.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 2
+    },
+    "name": "Mind Rot",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "mind_rot_002": {
+    "base_id": "mind_rot",
+    "card_id": "mind_rot_002",
+    "card_type": "Sorcery",
+    "cmc": 3,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "Target player discards two cards.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 2
+    },
+    "name": "Mind Rot",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "mind_rot_003": {
+    "base_id": "mind_rot",
+    "card_id": "mind_rot_003",
+    "card_type": "Sorcery",
+    "cmc": 3,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "Target player discards two cards.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 2
+    },
+    "name": "Mind Rot",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "mind_rot_004": {
+    "base_id": "mind_rot",
+    "card_id": "mind_rot_004",
+    "card_type": "Sorcery",
+    "cmc": 3,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "Target player discards two cards.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 2
+    },
+    "name": "Mind Rot",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "monastery_swiftspear_001": {
+    "base_id": "monastery_swiftspear",
+    "card_id": "monastery_swiftspear_001",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Haste. Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn).",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Monastery Swiftspear",
+    "power": 1,
+    "subtype": "Human Monk",
+    "toughness": 2
+  },
+  "monastery_swiftspear_002": {
+    "base_id": "monastery_swiftspear",
+    "card_id": "monastery_swiftspear_002",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Haste. Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn).",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Monastery Swiftspear",
+    "power": 1,
+    "subtype": "Human Monk",
+    "toughness": 2
+  },
+  "monastery_swiftspear_003": {
+    "base_id": "monastery_swiftspear",
+    "card_id": "monastery_swiftspear_003",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Haste. Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn).",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Monastery Swiftspear",
+    "power": 1,
+    "subtype": "Human Monk",
+    "toughness": 2
+  },
+  "monastery_swiftspear_004": {
+    "base_id": "monastery_swiftspear",
+    "card_id": "monastery_swiftspear_004",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Haste. Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn).",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Monastery Swiftspear",
+    "power": 1,
+    "subtype": "Human Monk",
+    "toughness": 2
+  },
+  "mother_of_runes_001": {
+    "base_id": "mother_of_runes",
+    "card_id": "mother_of_runes_001",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "Tap: Target creature you control gains protection from the color of your choice until end of turn.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Mother of Runes",
+    "power": 1,
+    "subtype": "Human Cleric",
+    "toughness": 1
+  },
+  "mother_of_runes_002": {
+    "base_id": "mother_of_runes",
+    "card_id": "mother_of_runes_002",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "Tap: Target creature you control gains protection from the color of your choice until end of turn.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Mother of Runes",
+    "power": 1,
+    "subtype": "Human Cleric",
+    "toughness": 1
+  },
+  "mother_of_runes_003": {
+    "base_id": "mother_of_runes",
+    "card_id": "mother_of_runes_003",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "Tap: Target creature you control gains protection from the color of your choice until end of turn.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Mother of Runes",
+    "power": 1,
+    "subtype": "Human Cleric",
+    "toughness": 1
+  },
+  "mother_of_runes_004": {
+    "base_id": "mother_of_runes",
+    "card_id": "mother_of_runes_004",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "Tap: Target creature you control gains protection from the color of your choice until end of turn.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Mother of Runes",
+    "power": 1,
+    "subtype": "Human Cleric",
+    "toughness": 1
+  },
+  "mountain_001": {
+    "base_id": "mountain",
+    "card_id": "mountain_001",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_002": {
+    "base_id": "mountain",
+    "card_id": "mountain_002",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_003": {
+    "base_id": "mountain",
+    "card_id": "mountain_003",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_004": {
+    "base_id": "mountain",
+    "card_id": "mountain_004",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_005": {
+    "base_id": "mountain",
+    "card_id": "mountain_005",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 5,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_006": {
+    "base_id": "mountain",
+    "card_id": "mountain_006",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 6,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_007": {
+    "base_id": "mountain",
+    "card_id": "mountain_007",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 7,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_008": {
+    "base_id": "mountain",
+    "card_id": "mountain_008",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 8,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_009": {
+    "base_id": "mountain",
+    "card_id": "mountain_009",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 9,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_010": {
+    "base_id": "mountain",
+    "card_id": "mountain_010",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 10,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_011": {
+    "base_id": "mountain",
+    "card_id": "mountain_011",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 11,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_012": {
+    "base_id": "mountain",
+    "card_id": "mountain_012",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 12,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_013": {
+    "base_id": "mountain",
+    "card_id": "mountain_013",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 13,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_014": {
+    "base_id": "mountain",
+    "card_id": "mountain_014",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 14,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_015": {
+    "base_id": "mountain",
+    "card_id": "mountain_015",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 15,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_016": {
+    "base_id": "mountain",
+    "card_id": "mountain_016",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 16,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_017": {
+    "base_id": "mountain",
+    "card_id": "mountain_017",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 17,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_018": {
+    "base_id": "mountain",
+    "card_id": "mountain_018",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 18,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_019": {
+    "base_id": "mountain",
+    "card_id": "mountain_019",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 19,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "mountain_020": {
+    "base_id": "mountain",
+    "card_id": "mountain_020",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "R",
+    "copy_number": 20,
+    "effect": "Tap: Add {R}.",
+    "mana_cost": {},
+    "name": "Mountain",
+    "power": null,
+    "subtype": "Basic Mountain",
+    "toughness": null
+  },
+  "naturalize_001": {
+    "base_id": "naturalize",
+    "card_id": "naturalize_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "Destroy target artifact or enchantment.",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Naturalize",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "naturalize_002": {
+    "base_id": "naturalize",
+    "card_id": "naturalize_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "Destroy target artifact or enchantment.",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Naturalize",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "naturalize_003": {
+    "base_id": "naturalize",
+    "card_id": "naturalize_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "Destroy target artifact or enchantment.",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Naturalize",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "naturalize_004": {
+    "base_id": "naturalize",
+    "card_id": "naturalize_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "Destroy target artifact or enchantment.",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Naturalize",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "negate_001": {
+    "base_id": "negate",
+    "card_id": "negate_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Counter target noncreature spell.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Negate",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "negate_002": {
+    "base_id": "negate",
+    "card_id": "negate_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Counter target noncreature spell.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Negate",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "negate_003": {
+    "base_id": "negate",
+    "card_id": "negate_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Counter target noncreature spell.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Negate",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "negate_004": {
+    "base_id": "negate",
+    "card_id": "negate_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Counter target noncreature spell.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 1
+    },
+    "name": "Negate",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "ornithopter_001": {
+    "base_id": "ornithopter",
+    "card_id": "ornithopter_001",
+    "card_type": "Artifact Creature",
+    "cmc": 0,
+    "color": "C",
+    "copy_number": 1,
+    "effect": "Flying.",
+    "mana_cost": {},
+    "name": "Ornithopter",
+    "power": 0,
+    "subtype": "Thopter",
+    "toughness": 2
+  },
+  "ornithopter_002": {
+    "base_id": "ornithopter",
+    "card_id": "ornithopter_002",
+    "card_type": "Artifact Creature",
+    "cmc": 0,
+    "color": "C",
+    "copy_number": 2,
+    "effect": "Flying.",
+    "mana_cost": {},
+    "name": "Ornithopter",
+    "power": 0,
+    "subtype": "Thopter",
+    "toughness": 2
+  },
+  "ornithopter_003": {
+    "base_id": "ornithopter",
+    "card_id": "ornithopter_003",
+    "card_type": "Artifact Creature",
+    "cmc": 0,
+    "color": "C",
+    "copy_number": 3,
+    "effect": "Flying.",
+    "mana_cost": {},
+    "name": "Ornithopter",
+    "power": 0,
+    "subtype": "Thopter",
+    "toughness": 2
+  },
+  "ornithopter_004": {
+    "base_id": "ornithopter",
+    "card_id": "ornithopter_004",
+    "card_type": "Artifact Creature",
+    "cmc": 0,
+    "color": "C",
+    "copy_number": 4,
+    "effect": "Flying.",
+    "mana_cost": {},
+    "name": "Ornithopter",
+    "power": 0,
+    "subtype": "Thopter",
+    "toughness": 2
+  },
+  "pacifism_001": {
+    "base_id": "pacifism",
+    "card_id": "pacifism_001",
+    "card_type": "Enchantment",
+    "cmc": 2,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "Enchant creature. Enchanted creature can't attack or block.",
+    "mana_cost": {
+      "W": 1,
+      "generic": 1
+    },
+    "name": "Pacifism",
+    "power": null,
+    "subtype": "Aura",
+    "toughness": null
+  },
+  "pacifism_002": {
+    "base_id": "pacifism",
+    "card_id": "pacifism_002",
+    "card_type": "Enchantment",
+    "cmc": 2,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "Enchant creature. Enchanted creature can't attack or block.",
+    "mana_cost": {
+      "W": 1,
+      "generic": 1
+    },
+    "name": "Pacifism",
+    "power": null,
+    "subtype": "Aura",
+    "toughness": null
+  },
+  "pacifism_003": {
+    "base_id": "pacifism",
+    "card_id": "pacifism_003",
+    "card_type": "Enchantment",
+    "cmc": 2,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "Enchant creature. Enchanted creature can't attack or block.",
+    "mana_cost": {
+      "W": 1,
+      "generic": 1
+    },
+    "name": "Pacifism",
+    "power": null,
+    "subtype": "Aura",
+    "toughness": null
+  },
+  "pacifism_004": {
+    "base_id": "pacifism",
+    "card_id": "pacifism_004",
+    "card_type": "Enchantment",
+    "cmc": 2,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "Enchant creature. Enchanted creature can't attack or block.",
+    "mana_cost": {
+      "W": 1,
+      "generic": 1
+    },
+    "name": "Pacifism",
+    "power": null,
+    "subtype": "Aura",
+    "toughness": null
+  },
+  "path_to_exile_001": {
+    "base_id": "path_to_exile",
+    "card_id": "path_to_exile_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "Exile target creature. Its controller may search for a basic land, put it onto the battlefield tapped, then shuffle.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Path to Exile",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "path_to_exile_002": {
+    "base_id": "path_to_exile",
+    "card_id": "path_to_exile_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "Exile target creature. Its controller may search for a basic land, put it onto the battlefield tapped, then shuffle.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Path to Exile",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "path_to_exile_003": {
+    "base_id": "path_to_exile",
+    "card_id": "path_to_exile_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "Exile target creature. Its controller may search for a basic land, put it onto the battlefield tapped, then shuffle.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Path to Exile",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "path_to_exile_004": {
+    "base_id": "path_to_exile",
+    "card_id": "path_to_exile_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "Exile target creature. Its controller may search for a basic land, put it onto the battlefield tapped, then shuffle.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Path to Exile",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "phantasmal_bear_001": {
+    "base_id": "phantasmal_bear",
+    "card_id": "phantasmal_bear_001",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Illusion. When Phantasmal Bear becomes the target of a spell or ability, sacrifice it.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Phantasmal Bear",
+    "power": 2,
+    "subtype": "Bear Illusion",
+    "toughness": 2
+  },
+  "phantasmal_bear_002": {
+    "base_id": "phantasmal_bear",
+    "card_id": "phantasmal_bear_002",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Illusion. When Phantasmal Bear becomes the target of a spell or ability, sacrifice it.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Phantasmal Bear",
+    "power": 2,
+    "subtype": "Bear Illusion",
+    "toughness": 2
+  },
+  "phantasmal_bear_003": {
+    "base_id": "phantasmal_bear",
+    "card_id": "phantasmal_bear_003",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Illusion. When Phantasmal Bear becomes the target of a spell or ability, sacrifice it.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Phantasmal Bear",
+    "power": 2,
+    "subtype": "Bear Illusion",
+    "toughness": 2
+  },
+  "phantasmal_bear_004": {
+    "base_id": "phantasmal_bear",
+    "card_id": "phantasmal_bear_004",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Illusion. When Phantasmal Bear becomes the target of a spell or ability, sacrifice it.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Phantasmal Bear",
+    "power": 2,
+    "subtype": "Bear Illusion",
+    "toughness": 2
+  },
+  "plains_001": {
+    "base_id": "plains",
+    "card_id": "plains_001",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_002": {
+    "base_id": "plains",
+    "card_id": "plains_002",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_003": {
+    "base_id": "plains",
+    "card_id": "plains_003",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_004": {
+    "base_id": "plains",
+    "card_id": "plains_004",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_005": {
+    "base_id": "plains",
+    "card_id": "plains_005",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 5,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_006": {
+    "base_id": "plains",
+    "card_id": "plains_006",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 6,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_007": {
+    "base_id": "plains",
+    "card_id": "plains_007",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 7,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_008": {
+    "base_id": "plains",
+    "card_id": "plains_008",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 8,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_009": {
+    "base_id": "plains",
+    "card_id": "plains_009",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 9,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_010": {
+    "base_id": "plains",
+    "card_id": "plains_010",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 10,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_011": {
+    "base_id": "plains",
+    "card_id": "plains_011",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 11,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_012": {
+    "base_id": "plains",
+    "card_id": "plains_012",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 12,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_013": {
+    "base_id": "plains",
+    "card_id": "plains_013",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 13,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_014": {
+    "base_id": "plains",
+    "card_id": "plains_014",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 14,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_015": {
+    "base_id": "plains",
+    "card_id": "plains_015",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 15,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_016": {
+    "base_id": "plains",
+    "card_id": "plains_016",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 16,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_017": {
+    "base_id": "plains",
+    "card_id": "plains_017",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 17,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_018": {
+    "base_id": "plains",
+    "card_id": "plains_018",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 18,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_019": {
+    "base_id": "plains",
+    "card_id": "plains_019",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 19,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "plains_020": {
+    "base_id": "plains",
+    "card_id": "plains_020",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "W",
+    "copy_number": 20,
+    "effect": "Tap: Add {W}.",
+    "mana_cost": {},
+    "name": "Plains",
+    "power": null,
+    "subtype": "Basic Plains",
+    "toughness": null
+  },
+  "ponder_001": {
+    "base_id": "ponder",
+    "card_id": "ponder_001",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Look at top 3 cards of your library, then put them back in any order. You may shuffle. Draw a card.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Ponder",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "ponder_002": {
+    "base_id": "ponder",
+    "card_id": "ponder_002",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Look at top 3 cards of your library, then put them back in any order. You may shuffle. Draw a card.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Ponder",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "ponder_003": {
+    "base_id": "ponder",
+    "card_id": "ponder_003",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Look at top 3 cards of your library, then put them back in any order. You may shuffle. Draw a card.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Ponder",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "ponder_004": {
+    "base_id": "ponder",
+    "card_id": "ponder_004",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Look at top 3 cards of your library, then put them back in any order. You may shuffle. Draw a card.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Ponder",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "prodigal_sorcerer_001": {
+    "base_id": "prodigal_sorcerer",
+    "card_id": "prodigal_sorcerer_001",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Tap: Prodigal Sorcerer deals 1 damage to any target.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 2
+    },
+    "name": "Prodigal Sorcerer",
+    "power": 1,
+    "subtype": "Human Wizard",
+    "toughness": 1
+  },
+  "prodigal_sorcerer_002": {
+    "base_id": "prodigal_sorcerer",
+    "card_id": "prodigal_sorcerer_002",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Tap: Prodigal Sorcerer deals 1 damage to any target.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 2
+    },
+    "name": "Prodigal Sorcerer",
+    "power": 1,
+    "subtype": "Human Wizard",
+    "toughness": 1
+  },
+  "prodigal_sorcerer_003": {
+    "base_id": "prodigal_sorcerer",
+    "card_id": "prodigal_sorcerer_003",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Tap: Prodigal Sorcerer deals 1 damage to any target.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 2
+    },
+    "name": "Prodigal Sorcerer",
+    "power": 1,
+    "subtype": "Human Wizard",
+    "toughness": 1
+  },
+  "prodigal_sorcerer_004": {
+    "base_id": "prodigal_sorcerer",
+    "card_id": "prodigal_sorcerer_004",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Tap: Prodigal Sorcerer deals 1 damage to any target.",
+    "mana_cost": {
+      "U": 1,
+      "generic": 2
+    },
+    "name": "Prodigal Sorcerer",
+    "power": 1,
+    "subtype": "Human Wizard",
+    "toughness": 1
+  },
+  "raise_dead_001": {
+    "base_id": "raise_dead",
+    "card_id": "raise_dead_001",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "Return target creature card from your graveyard to your hand.",
+    "mana_cost": {
+      "B": 1
+    },
+    "name": "Raise Dead",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "raise_dead_002": {
+    "base_id": "raise_dead",
+    "card_id": "raise_dead_002",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "Return target creature card from your graveyard to your hand.",
+    "mana_cost": {
+      "B": 1
+    },
+    "name": "Raise Dead",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "raise_dead_003": {
+    "base_id": "raise_dead",
+    "card_id": "raise_dead_003",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "Return target creature card from your graveyard to your hand.",
+    "mana_cost": {
+      "B": 1
+    },
+    "name": "Raise Dead",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "raise_dead_004": {
+    "base_id": "raise_dead",
+    "card_id": "raise_dead_004",
+    "card_type": "Sorcery",
+    "cmc": 1,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "Return target creature card from your graveyard to your hand.",
+    "mana_cost": {
+      "B": 1
+    },
+    "name": "Raise Dead",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rampant_growth_001": {
+    "base_id": "rampant_growth",
+    "card_id": "rampant_growth_001",
+    "card_type": "Sorcery",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "Search your library for a basic land, put it onto the battlefield tapped, then shuffle.",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Rampant Growth",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rampant_growth_002": {
+    "base_id": "rampant_growth",
+    "card_id": "rampant_growth_002",
+    "card_type": "Sorcery",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "Search your library for a basic land, put it onto the battlefield tapped, then shuffle.",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Rampant Growth",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rampant_growth_003": {
+    "base_id": "rampant_growth",
+    "card_id": "rampant_growth_003",
+    "card_type": "Sorcery",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "Search your library for a basic land, put it onto the battlefield tapped, then shuffle.",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Rampant Growth",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rampant_growth_004": {
+    "base_id": "rampant_growth",
+    "card_id": "rampant_growth_004",
+    "card_type": "Sorcery",
+    "cmc": 2,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "Search your library for a basic land, put it onto the battlefield tapped, then shuffle.",
+    "mana_cost": {
+      "G": 1,
+      "generic": 1
+    },
+    "name": "Rampant Growth",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "reckless_wurm_001": {
+    "base_id": "reckless_wurm",
+    "card_id": "reckless_wurm_001",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Trample. Madness {2}{R}.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 3
+    },
+    "name": "Reckless Wurm",
+    "power": 4,
+    "subtype": "Wurm",
+    "toughness": 4
+  },
+  "reckless_wurm_002": {
+    "base_id": "reckless_wurm",
+    "card_id": "reckless_wurm_002",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Trample. Madness {2}{R}.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 3
+    },
+    "name": "Reckless Wurm",
+    "power": 4,
+    "subtype": "Wurm",
+    "toughness": 4
+  },
+  "reckless_wurm_003": {
+    "base_id": "reckless_wurm",
+    "card_id": "reckless_wurm_003",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Trample. Madness {2}{R}.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 3
+    },
+    "name": "Reckless Wurm",
+    "power": 4,
+    "subtype": "Wurm",
+    "toughness": 4
+  },
+  "reckless_wurm_004": {
+    "base_id": "reckless_wurm",
+    "card_id": "reckless_wurm_004",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Trample. Madness {2}{R}.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 3
+    },
+    "name": "Reckless Wurm",
+    "power": 4,
+    "subtype": "Wurm",
+    "toughness": 4
+  },
+  "rift_bolt_001": {
+    "base_id": "rift_bolt",
+    "card_id": "rift_bolt_001",
+    "card_type": "Sorcery",
+    "cmc": 3,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Rift Bolt deals 3 damage to any target. Suspend 1\u2014{R}.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 2
+    },
+    "name": "Rift Bolt",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rift_bolt_002": {
+    "base_id": "rift_bolt",
+    "card_id": "rift_bolt_002",
+    "card_type": "Sorcery",
+    "cmc": 3,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Rift Bolt deals 3 damage to any target. Suspend 1\u2014{R}.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 2
+    },
+    "name": "Rift Bolt",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rift_bolt_003": {
+    "base_id": "rift_bolt",
+    "card_id": "rift_bolt_003",
+    "card_type": "Sorcery",
+    "cmc": 3,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Rift Bolt deals 3 damage to any target. Suspend 1\u2014{R}.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 2
+    },
+    "name": "Rift Bolt",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rift_bolt_004": {
+    "base_id": "rift_bolt",
+    "card_id": "rift_bolt_004",
+    "card_type": "Sorcery",
+    "cmc": 3,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Rift Bolt deals 3 damage to any target. Suspend 1\u2014{R}.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 2
+    },
+    "name": "Rift Bolt",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rod_of_ruin_001": {
+    "base_id": "rod_of_ruin",
+    "card_id": "rod_of_ruin_001",
+    "card_type": "Artifact",
+    "cmc": 4,
+    "color": "C",
+    "copy_number": 1,
+    "effect": "{3}, Tap: Rod of Ruin deals 1 damage to any target.",
+    "mana_cost": {
+      "generic": 4
+    },
+    "name": "Rod of Ruin",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rod_of_ruin_002": {
+    "base_id": "rod_of_ruin",
+    "card_id": "rod_of_ruin_002",
+    "card_type": "Artifact",
+    "cmc": 4,
+    "color": "C",
+    "copy_number": 2,
+    "effect": "{3}, Tap: Rod of Ruin deals 1 damage to any target.",
+    "mana_cost": {
+      "generic": 4
+    },
+    "name": "Rod of Ruin",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rod_of_ruin_003": {
+    "base_id": "rod_of_ruin",
+    "card_id": "rod_of_ruin_003",
+    "card_type": "Artifact",
+    "cmc": 4,
+    "color": "C",
+    "copy_number": 3,
+    "effect": "{3}, Tap: Rod of Ruin deals 1 damage to any target.",
+    "mana_cost": {
+      "generic": 4
+    },
+    "name": "Rod of Ruin",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "rod_of_ruin_004": {
+    "base_id": "rod_of_ruin",
+    "card_id": "rod_of_ruin_004",
+    "card_type": "Artifact",
+    "cmc": 4,
+    "color": "C",
+    "copy_number": 4,
+    "effect": "{3}, Tap: Rod of Ruin deals 1 damage to any target.",
+    "mana_cost": {
+      "generic": 4
+    },
+    "name": "Rod of Ruin",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "royal_assassin_001": {
+    "base_id": "royal_assassin",
+    "card_id": "royal_assassin_001",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "Tap: Destroy target tapped creature.",
+    "mana_cost": {
+      "B": 2,
+      "generic": 1
+    },
+    "name": "Royal Assassin",
+    "power": 1,
+    "subtype": "Human Assassin",
+    "toughness": 1
+  },
+  "royal_assassin_002": {
+    "base_id": "royal_assassin",
+    "card_id": "royal_assassin_002",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "Tap: Destroy target tapped creature.",
+    "mana_cost": {
+      "B": 2,
+      "generic": 1
+    },
+    "name": "Royal Assassin",
+    "power": 1,
+    "subtype": "Human Assassin",
+    "toughness": 1
+  },
+  "royal_assassin_003": {
+    "base_id": "royal_assassin",
+    "card_id": "royal_assassin_003",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "Tap: Destroy target tapped creature.",
+    "mana_cost": {
+      "B": 2,
+      "generic": 1
+    },
+    "name": "Royal Assassin",
+    "power": 1,
+    "subtype": "Human Assassin",
+    "toughness": 1
+  },
+  "royal_assassin_004": {
+    "base_id": "royal_assassin",
+    "card_id": "royal_assassin_004",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "Tap: Destroy target tapped creature.",
+    "mana_cost": {
+      "B": 2,
+      "generic": 1
+    },
+    "name": "Royal Assassin",
+    "power": 1,
+    "subtype": "Human Assassin",
+    "toughness": 1
+  },
+  "savannah_lions_001": {
+    "base_id": "savannah_lions",
+    "card_id": "savannah_lions_001",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Savannah Lions",
+    "power": 2,
+    "subtype": "Cat",
+    "toughness": 1
+  },
+  "savannah_lions_002": {
+    "base_id": "savannah_lions",
+    "card_id": "savannah_lions_002",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Savannah Lions",
+    "power": 2,
+    "subtype": "Cat",
+    "toughness": 1
+  },
+  "savannah_lions_003": {
+    "base_id": "savannah_lions",
+    "card_id": "savannah_lions_003",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Savannah Lions",
+    "power": 2,
+    "subtype": "Cat",
+    "toughness": 1
+  },
+  "savannah_lions_004": {
+    "base_id": "savannah_lions",
+    "card_id": "savannah_lions_004",
+    "card_type": "Creature",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "(No abilities.)",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Savannah Lions",
+    "power": 2,
+    "subtype": "Cat",
+    "toughness": 1
+  },
+  "searing_spear_001": {
+    "base_id": "searing_spear",
+    "card_id": "searing_spear_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Searing Spear deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Searing Spear",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "searing_spear_002": {
+    "base_id": "searing_spear",
+    "card_id": "searing_spear_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Searing Spear deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Searing Spear",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "searing_spear_003": {
+    "base_id": "searing_spear",
+    "card_id": "searing_spear_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Searing Spear deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Searing Spear",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "searing_spear_004": {
+    "base_id": "searing_spear",
+    "card_id": "searing_spear_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Searing Spear deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Searing Spear",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "serra_angel_001": {
+    "base_id": "serra_angel",
+    "card_id": "serra_angel_001",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "Flying. Vigilance.",
+    "mana_cost": {
+      "W": 2,
+      "generic": 3
+    },
+    "name": "Serra Angel",
+    "power": 4,
+    "subtype": "Angel",
+    "toughness": 4
+  },
+  "serra_angel_002": {
+    "base_id": "serra_angel",
+    "card_id": "serra_angel_002",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "Flying. Vigilance.",
+    "mana_cost": {
+      "W": 2,
+      "generic": 3
+    },
+    "name": "Serra Angel",
+    "power": 4,
+    "subtype": "Angel",
+    "toughness": 4
+  },
+  "serra_angel_003": {
+    "base_id": "serra_angel",
+    "card_id": "serra_angel_003",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "Flying. Vigilance.",
+    "mana_cost": {
+      "W": 2,
+      "generic": 3
+    },
+    "name": "Serra Angel",
+    "power": 4,
+    "subtype": "Angel",
+    "toughness": 4
+  },
+  "serra_angel_004": {
+    "base_id": "serra_angel",
+    "card_id": "serra_angel_004",
+    "card_type": "Creature",
+    "cmc": 5,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "Flying. Vigilance.",
+    "mana_cost": {
+      "W": 2,
+      "generic": 3
+    },
+    "name": "Serra Angel",
+    "power": 4,
+    "subtype": "Angel",
+    "toughness": 4
+  },
+  "shock_001": {
+    "base_id": "shock",
+    "card_id": "shock_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Shock deals 2 damage to any target.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Shock",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "shock_002": {
+    "base_id": "shock",
+    "card_id": "shock_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Shock deals 2 damage to any target.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Shock",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "shock_003": {
+    "base_id": "shock",
+    "card_id": "shock_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Shock deals 2 damage to any target.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Shock",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "shock_004": {
+    "base_id": "shock",
+    "card_id": "shock_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Shock deals 2 damage to any target.",
+    "mana_cost": {
+      "R": 1
+    },
+    "name": "Shock",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "skullcrack_001": {
+    "base_id": "skullcrack",
+    "card_id": "skullcrack_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Players can't gain life this turn. Damage can't be prevented this turn. Skullcrack deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Skullcrack",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "skullcrack_002": {
+    "base_id": "skullcrack",
+    "card_id": "skullcrack_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Players can't gain life this turn. Damage can't be prevented this turn. Skullcrack deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Skullcrack",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "skullcrack_003": {
+    "base_id": "skullcrack",
+    "card_id": "skullcrack_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Players can't gain life this turn. Damage can't be prevented this turn. Skullcrack deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Skullcrack",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "skullcrack_004": {
+    "base_id": "skullcrack",
+    "card_id": "skullcrack_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Players can't gain life this turn. Damage can't be prevented this turn. Skullcrack deals 3 damage to any target.",
+    "mana_cost": {
+      "R": 1,
+      "generic": 1
+    },
+    "name": "Skullcrack",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "sol_ring_001": {
+    "base_id": "sol_ring",
+    "card_id": "sol_ring_001",
+    "card_type": "Artifact",
+    "cmc": 1,
+    "color": "C",
+    "copy_number": 1,
+    "effect": "Tap: Add {C}{C}.",
+    "mana_cost": {
+      "generic": 1
+    },
+    "name": "Sol Ring",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "sol_ring_002": {
+    "base_id": "sol_ring",
+    "card_id": "sol_ring_002",
+    "card_type": "Artifact",
+    "cmc": 1,
+    "color": "C",
+    "copy_number": 2,
+    "effect": "Tap: Add {C}{C}.",
+    "mana_cost": {
+      "generic": 1
+    },
+    "name": "Sol Ring",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "sol_ring_003": {
+    "base_id": "sol_ring",
+    "card_id": "sol_ring_003",
+    "card_type": "Artifact",
+    "cmc": 1,
+    "color": "C",
+    "copy_number": 3,
+    "effect": "Tap: Add {C}{C}.",
+    "mana_cost": {
+      "generic": 1
+    },
+    "name": "Sol Ring",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "sol_ring_004": {
+    "base_id": "sol_ring",
+    "card_id": "sol_ring_004",
+    "card_type": "Artifact",
+    "cmc": 1,
+    "color": "C",
+    "copy_number": 4,
+    "effect": "Tap: Add {C}{C}.",
+    "mana_cost": {
+      "generic": 1
+    },
+    "name": "Sol Ring",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "swamp_001": {
+    "base_id": "swamp",
+    "card_id": "swamp_001",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_002": {
+    "base_id": "swamp",
+    "card_id": "swamp_002",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_003": {
+    "base_id": "swamp",
+    "card_id": "swamp_003",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_004": {
+    "base_id": "swamp",
+    "card_id": "swamp_004",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_005": {
+    "base_id": "swamp",
+    "card_id": "swamp_005",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 5,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_006": {
+    "base_id": "swamp",
+    "card_id": "swamp_006",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 6,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_007": {
+    "base_id": "swamp",
+    "card_id": "swamp_007",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 7,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_008": {
+    "base_id": "swamp",
+    "card_id": "swamp_008",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 8,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_009": {
+    "base_id": "swamp",
+    "card_id": "swamp_009",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 9,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_010": {
+    "base_id": "swamp",
+    "card_id": "swamp_010",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 10,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_011": {
+    "base_id": "swamp",
+    "card_id": "swamp_011",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 11,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_012": {
+    "base_id": "swamp",
+    "card_id": "swamp_012",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 12,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_013": {
+    "base_id": "swamp",
+    "card_id": "swamp_013",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 13,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_014": {
+    "base_id": "swamp",
+    "card_id": "swamp_014",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 14,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_015": {
+    "base_id": "swamp",
+    "card_id": "swamp_015",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 15,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_016": {
+    "base_id": "swamp",
+    "card_id": "swamp_016",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 16,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_017": {
+    "base_id": "swamp",
+    "card_id": "swamp_017",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 17,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_018": {
+    "base_id": "swamp",
+    "card_id": "swamp_018",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 18,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_019": {
+    "base_id": "swamp",
+    "card_id": "swamp_019",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 19,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swamp_020": {
+    "base_id": "swamp",
+    "card_id": "swamp_020",
+    "card_type": "Land",
+    "cmc": 0,
+    "color": "B",
+    "copy_number": 20,
+    "effect": "Tap: Add {B}.",
+    "mana_cost": {},
+    "name": "Swamp",
+    "power": null,
+    "subtype": "Basic Swamp",
+    "toughness": null
+  },
+  "swords_to_plowshares_001": {
+    "base_id": "swords_to_plowshares",
+    "card_id": "swords_to_plowshares_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "Exile target creature. Its controller gains life equal to its power.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Swords to Plowshares",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "swords_to_plowshares_002": {
+    "base_id": "swords_to_plowshares",
+    "card_id": "swords_to_plowshares_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "Exile target creature. Its controller gains life equal to its power.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Swords to Plowshares",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "swords_to_plowshares_003": {
+    "base_id": "swords_to_plowshares",
+    "card_id": "swords_to_plowshares_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "Exile target creature. Its controller gains life equal to its power.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Swords to Plowshares",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "swords_to_plowshares_004": {
+    "base_id": "swords_to_plowshares",
+    "card_id": "swords_to_plowshares_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "Exile target creature. Its controller gains life equal to its power.",
+    "mana_cost": {
+      "W": 1
+    },
+    "name": "Swords to Plowshares",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "terror_001": {
+    "base_id": "terror",
+    "card_id": "terror_001",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 1,
+    "effect": "Destroy target nonartifact, nonblack creature. It can't be regenerated.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 1
+    },
+    "name": "Terror",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "terror_002": {
+    "base_id": "terror",
+    "card_id": "terror_002",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 2,
+    "effect": "Destroy target nonartifact, nonblack creature. It can't be regenerated.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 1
+    },
+    "name": "Terror",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "terror_003": {
+    "base_id": "terror",
+    "card_id": "terror_003",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 3,
+    "effect": "Destroy target nonartifact, nonblack creature. It can't be regenerated.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 1
+    },
+    "name": "Terror",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "terror_004": {
+    "base_id": "terror",
+    "card_id": "terror_004",
+    "card_type": "Instant",
+    "cmc": 2,
+    "color": "B",
+    "copy_number": 4,
+    "effect": "Destroy target nonartifact, nonblack creature. It can't be regenerated.",
+    "mana_cost": {
+      "B": 1,
+      "generic": 1
+    },
+    "name": "Terror",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "troll_ascetic_001": {
+    "base_id": "troll_ascetic",
+    "card_id": "troll_ascetic_001",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "Hexproof. {1}{G}: Regenerate Troll Ascetic.",
+    "mana_cost": {
+      "G": 2,
+      "generic": 1
+    },
+    "name": "Troll Ascetic",
+    "power": 3,
+    "subtype": "Troll Shaman",
+    "toughness": 2
+  },
+  "troll_ascetic_002": {
+    "base_id": "troll_ascetic",
+    "card_id": "troll_ascetic_002",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "Hexproof. {1}{G}: Regenerate Troll Ascetic.",
+    "mana_cost": {
+      "G": 2,
+      "generic": 1
+    },
+    "name": "Troll Ascetic",
+    "power": 3,
+    "subtype": "Troll Shaman",
+    "toughness": 2
+  },
+  "troll_ascetic_003": {
+    "base_id": "troll_ascetic",
+    "card_id": "troll_ascetic_003",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "Hexproof. {1}{G}: Regenerate Troll Ascetic.",
+    "mana_cost": {
+      "G": 2,
+      "generic": 1
+    },
+    "name": "Troll Ascetic",
+    "power": 3,
+    "subtype": "Troll Shaman",
+    "toughness": 2
+  },
+  "troll_ascetic_004": {
+    "base_id": "troll_ascetic",
+    "card_id": "troll_ascetic_004",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "Hexproof. {1}{G}: Regenerate Troll Ascetic.",
+    "mana_cost": {
+      "G": 2,
+      "generic": 1
+    },
+    "name": "Troll Ascetic",
+    "power": 3,
+    "subtype": "Troll Shaman",
+    "toughness": 2
+  },
+  "unsummon_001": {
+    "base_id": "unsummon",
+    "card_id": "unsummon_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 1,
+    "effect": "Return target creature to its owner's hand.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Unsummon",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "unsummon_002": {
+    "base_id": "unsummon",
+    "card_id": "unsummon_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 2,
+    "effect": "Return target creature to its owner's hand.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Unsummon",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "unsummon_003": {
+    "base_id": "unsummon",
+    "card_id": "unsummon_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 3,
+    "effect": "Return target creature to its owner's hand.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Unsummon",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "unsummon_004": {
+    "base_id": "unsummon",
+    "card_id": "unsummon_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "U",
+    "copy_number": 4,
+    "effect": "Return target creature to its owner's hand.",
+    "mana_cost": {
+      "U": 1
+    },
+    "name": "Unsummon",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "vines_of_vastwood_001": {
+    "base_id": "vines_of_vastwood",
+    "card_id": "vines_of_vastwood_001",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 1,
+    "effect": "Kicker {G}. Target creature can't be the target of spells or abilities your opponents control this turn. If this spell was kicked, that creature gets +4/+4 until end of turn.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Vines of Vastwood",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "vines_of_vastwood_002": {
+    "base_id": "vines_of_vastwood",
+    "card_id": "vines_of_vastwood_002",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 2,
+    "effect": "Kicker {G}. Target creature can't be the target of spells or abilities your opponents control this turn. If this spell was kicked, that creature gets +4/+4 until end of turn.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Vines of Vastwood",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "vines_of_vastwood_003": {
+    "base_id": "vines_of_vastwood",
+    "card_id": "vines_of_vastwood_003",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 3,
+    "effect": "Kicker {G}. Target creature can't be the target of spells or abilities your opponents control this turn. If this spell was kicked, that creature gets +4/+4 until end of turn.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Vines of Vastwood",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "vines_of_vastwood_004": {
+    "base_id": "vines_of_vastwood",
+    "card_id": "vines_of_vastwood_004",
+    "card_type": "Instant",
+    "cmc": 1,
+    "color": "G",
+    "copy_number": 4,
+    "effect": "Kicker {G}. Target creature can't be the target of spells or abilities your opponents control this turn. If this spell was kicked, that creature gets +4/+4 until end of turn.",
+    "mana_cost": {
+      "G": 1
+    },
+    "name": "Vines of Vastwood",
+    "power": null,
+    "subtype": null,
+    "toughness": null
+  },
+  "wall_of_stone_001": {
+    "base_id": "wall_of_stone",
+    "card_id": "wall_of_stone_001",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "R",
+    "copy_number": 1,
+    "effect": "Defender.",
+    "mana_cost": {
+      "R": 2,
+      "generic": 1
+    },
+    "name": "Wall of Stone",
+    "power": 0,
+    "subtype": "Wall",
+    "toughness": 8
+  },
+  "wall_of_stone_002": {
+    "base_id": "wall_of_stone",
+    "card_id": "wall_of_stone_002",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "R",
+    "copy_number": 2,
+    "effect": "Defender.",
+    "mana_cost": {
+      "R": 2,
+      "generic": 1
+    },
+    "name": "Wall of Stone",
+    "power": 0,
+    "subtype": "Wall",
+    "toughness": 8
+  },
+  "wall_of_stone_003": {
+    "base_id": "wall_of_stone",
+    "card_id": "wall_of_stone_003",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "R",
+    "copy_number": 3,
+    "effect": "Defender.",
+    "mana_cost": {
+      "R": 2,
+      "generic": 1
+    },
+    "name": "Wall of Stone",
+    "power": 0,
+    "subtype": "Wall",
+    "toughness": 8
+  },
+  "wall_of_stone_004": {
+    "base_id": "wall_of_stone",
+    "card_id": "wall_of_stone_004",
+    "card_type": "Creature",
+    "cmc": 3,
+    "color": "R",
+    "copy_number": 4,
+    "effect": "Defender.",
+    "mana_cost": {
+      "R": 2,
+      "generic": 1
+    },
+    "name": "Wall of Stone",
+    "power": 0,
+    "subtype": "Wall",
+    "toughness": 8
+  },
+  "white_knight_001": {
+    "base_id": "white_knight",
+    "card_id": "white_knight_001",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "W",
+    "copy_number": 1,
+    "effect": "First strike. Protection from black.",
+    "mana_cost": {
+      "W": 2
+    },
+    "name": "White Knight",
+    "power": 2,
+    "subtype": "Human Knight",
+    "toughness": 2
+  },
+  "white_knight_002": {
+    "base_id": "white_knight",
+    "card_id": "white_knight_002",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "W",
+    "copy_number": 2,
+    "effect": "First strike. Protection from black.",
+    "mana_cost": {
+      "W": 2
+    },
+    "name": "White Knight",
+    "power": 2,
+    "subtype": "Human Knight",
+    "toughness": 2
+  },
+  "white_knight_003": {
+    "base_id": "white_knight",
+    "card_id": "white_knight_003",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "W",
+    "copy_number": 3,
+    "effect": "First strike. Protection from black.",
+    "mana_cost": {
+      "W": 2
+    },
+    "name": "White Knight",
+    "power": 2,
+    "subtype": "Human Knight",
+    "toughness": 2
+  },
+  "white_knight_004": {
+    "base_id": "white_knight",
+    "card_id": "white_knight_004",
+    "card_type": "Creature",
+    "cmc": 2,
+    "color": "W",
+    "copy_number": 4,
+    "effect": "First strike. Protection from black.",
+    "mana_cost": {
+      "W": 2
+    },
+    "name": "White Knight",
+    "power": 2,
+    "subtype": "Human Knight",
+    "toughness": 2
+  }
+}
