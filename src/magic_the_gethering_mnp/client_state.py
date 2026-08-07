@@ -503,17 +503,13 @@ class MTGNPClient:
         self.send_declare_blockers(blockers)
 
     def _prompt_mulligan(self) -> None:
-        hand = (self.state or {}).get("hand", [])
-        mulligan_count=(self.state or {}).get("mulligan_count",0)
-        print(f"    Mulligan? Hand ({len(hand)}): {hand}")
+            hand = (self.state or {}).get("hand", [])
+            mulligan_count = (self.state or {}).get("mulligan_count", 0)
+            print("-" * 60)
+            print(f"Mulligan decision — hand ({len(hand)} cards):")
+            for i, card_id in enumerate(hand, start=1):
+                print(f"  {i}. {card_id}")
 
-        if mulligan_count:
-            print(f"(Mulligan count: {mulligan_count} card(s).)")
-        raw=self._prompt_input("Keep hand? (y/n): ")
-        keep=raw.lower() in ("y", "yes", "1", "")
-        cards_to_bottom:list[str]=[]
-
-        if keep:
             if mulligan_count:
                 print(f"Already mulliganed {mulligan_count} time(s) — "
                     f"keeping requires bottoming {mulligan_count} card(s).")
@@ -524,18 +520,13 @@ class MTGNPClient:
             cards_to_bottom: list[str] = []
 
             if keep and mulligan_count:
-                raw_bottom = self._prompt_input(
-                    f"Card id(s) to bottom ({mulligan_count} required, comma-separated): ",
-                )
-                cards_to_bottom = [c.strip() for c in raw_bottom.split(",") if c.strip()]
-            elif keep:
-                raw_bottom = self._prompt_input(
+                raw_bottom = self._prompt_input(raw_bottom = self._prompt_input(
                     "Card id(s) to bottom (comma-separated, empty if none): ",
-                )
+                ))
                 cards_to_bottom = [c.strip() for c in raw_bottom.split(",") if c.strip()]
 
-        self.send_mulligan_choice(keep,cards_to_bottom)
-        self.mulligan_submitted=keep
+            self.send_mulligan_choice(keep, cards_to_bottom)
+            self.mulligan_submitted = True
 
     def _prompt_assign_damage_order(self) -> None:
         raw_attacker = self._prompt_input("Attacker id for damage order: ")
