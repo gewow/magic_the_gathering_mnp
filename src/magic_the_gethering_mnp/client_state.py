@@ -96,13 +96,6 @@ class MTGNPClient:
             self.current_phase = phase
         if phase == "MULLIGAN":
             self.pending_discard = False
-            # Every MULLIGAN-phase update this player receives represents
-            # a fresh hand needing a fresh decision -- either the initial
-            # deal, or the redraw after a previous "n". Without this
-            # reset, mulligan_submitted stays True forever after the
-            # first answer and the client never prompts again (silent
-            # hang, not a crash).
-            self.mulligan_submitted = False
         hand = self.state.get("hand", [])
         if self.current_phase == "CLEANUP" and len(hand) > constants.MAX_HAND_SIZE_BEFORE_DISCARD:
             self.pending_discard = True
@@ -280,9 +273,6 @@ class MTGNPClient:
             self.replace_state(incoming["state"])
             phase = self.state.get("phase") if self.state else None
 
-            if phase == "LOBBY":
-                self.mulligan_submitted = False
-
             if phase in ("MULLIGAN", "CLEANUP"):
                 self.action_token = incoming["seq_num"]
 
@@ -291,7 +281,7 @@ class MTGNPClient:
             if (
                 phase == "MULLIGAN"
                 and self.state.get("hand") is not None
-                and not self.mulligan_submitted
+                and not self.state.get("mulligan_kept", False)
             ):
                 self._prompt_mulligan()
             elif self.pending_discard:
@@ -323,6 +313,8 @@ class MTGNPClient:
             rejected = incoming.get("rejected_action")
             if rejected:
                 print(f"  Rejected: {rejected}")
+            if rejected and rejected.get("type") == "MULLIGAN_CHOICE" and self.action_token is not None:
+                self._prompt_mulligan()
 
         elif ptype == "STACK_PUSH":
             print(f"[{self.player_id}] Stack push: {incoming.get('source')} "
@@ -495,15 +487,26 @@ class MTGNPClient:
 
     def _prompt_mulligan(self) -> None:
         hand = (self.state or {}).get("hand", [])
-        print(f"Mulligan? Hand ({len(hand)}): {hand}")
+        mulligan_count = (self.state or {}).get("mulligan_count", 0)
+        print(f"    Mulligan? Hand ({len(hand)}): {hand}")
+
+        if mulligan_count:
+            print(f"(Mulligan count: {mulligan_count} card(s).)")
         raw = self._prompt_input("Keep hand? (y/n): ")
         keep = raw.lower() in ("y", "yes", "1", "")
         cards_to_bottom: list[str] = []
+
         if keep:
-            raw_bottom = self._prompt_input(
-                "Cards to bottom (comma-separated, empty if none): ",
-            )
+            if mulligan_count:
+                raw_bottom = self._prompt_input(
+                    f"Cards to Bottom ({mulligan_count} required, comma-separated): ",
+                )
+            else:
+                raw_bottom = self._prompt_input(
+                    "Cards to bottom (comma-separated, empty if none): ",
+                )
             cards_to_bottom = [c.strip() for c in raw_bottom.split(",") if c.strip()]
+
         self.send_mulligan_choice(keep, cards_to_bottom)
         self.mulligan_submitted = True
 

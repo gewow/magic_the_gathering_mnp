@@ -20,7 +20,7 @@ def is_verbose() -> bool:
 #TIMING RULES
 DEFAULT_TIME_LIMIT_MS = 60000 #default time limit
 HEARTBEAT_INTERVAL_S = 30 #recommended client ping interval based on specs
-HEARTBEAT_TIMEOUT_S = 300 #recommended pong wait before disconnect
+HEARTBEAT_TIMEOUT_S = 300 #recommended pong wait before disconnect (Change before end of project)
 
 #GAME SETUP RULES
 STARTING_LIFE = 20
