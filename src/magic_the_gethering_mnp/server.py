@@ -291,26 +291,6 @@ def _reject_action(conn, label, err, player_id, state):
         grant = pdu.build_priority_grant(state["_priority_seq"], player_id)
         send_pdu(conn, grant, label=label)
 
-def _find_permanent(state, source_id):
-    """
-    Returns (controller, permanent_dict) or (None, None)
-    """
-    for player_id in ["player_1", "player_2"]:
-        battlefield = state.get(player_id, {}).get("battlefield", [])
-        for perm in battlefield:
-            if perm.get("id") == source_id:
-                return player_id, perm
-    return None, None
-
-def validate_and_pay(state, player_id, mana_cost, card_catalog, spell):
-    """
-    Temporary stub:
-    Always returns success.
-
-    Replace later with real mana validation.
-    """
-    return True, []
-
 
 # ---------------------------------------------------------------------------
 # Triggered abilities (RFC Section 8.6)
@@ -931,97 +911,139 @@ def handle_client(conn, addr):
                     _grant_priority_to(player_id)
                     continue
 
-                # ACTIVATE_ABILITY handler
-                elif msg_type == "ACTIVATE_ABILITY":
+                # -----------------------------------------------------
+                # ACTIVATE_ABILITY
+                # -----------------------------------------------------
+                if msg_type == "ACTIVATE_ABILITY":
+
+                    if player_id != state.get("priority_holder"):
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_NOT_YOUR_PRIORITY,
+                            "You do not hold priority",
+                            msg
+                        )
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    seq_err = _check_seq("priority", player_id, msg)
+                    if seq_err:
+                        _reject_stale(conn, label, msg, reissue_priority_to=player_id)
+                        continue
+
                     source_id = msg.get("source_id")
                     ability_index = msg.get("ability_index")
                     cost_payment = msg.get("cost_payment", {})
+                    targets = msg.get("targets", [])
 
-                    # validate required fields 
+                    # --- validate required fields ---
                     if source_id is None or ability_index is None:
-                        err = pdu.build_illegal_action("Missing source_id or ability_index")
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_ILLEGAL_ACTION,
+                            "Missing source_id or ability_index",
+                            msg
+                        )
                         _reject_action(conn, label, err, player_id, state)
                         continue
 
-                    # find permanent 
-                    controller, permanent = _find_permanent(state, source_id)
-                    if not permanent:
-                        err = pdu.build_illegal_action("Invalid source_id")
+                    # --- find permanent (inline, no helper needed) ---
+                    controller = None
+                    permanent = None
+                    for pid, perms in state["battlefield"].items():
+                        for p in perms:
+                            if p.get("card_id") == source_id:
+                                controller = pid
+                                permanent = p
+                                break
+                        if permanent:
+                            break
+
+                    if permanent is None:
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_ILLEGAL_ACTION,
+                            "Source permanent not found",
+                            msg
+                        )
                         _reject_action(conn, label, err, player_id, state)
                         continue
 
-                    # validate ability index 
-                    abilities = permanent.get("abilities", [])
-                    if ability_index < 0 or ability_index >= len(abilities):
-                        err = pdu.build_illegal_action("Invalid ability_index")
+                    if controller != player_id:
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_ILLEGAL_ACTION,
+                            "You do not control this permanent",
+                            msg
+                        )
+                        _reject_action(conn, label, err, player_id, state)
+                        continue
+
+                    # --- get ability from catalog ---
+                    card_def = CARD_CATALOG.get(source_id, {})
+                    abilities = card_def.get("abilities", [])
+
+                    if ability_index >= len(abilities):
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_ILLEGAL_ACTION,
+                            "Invalid ability_index",
+                            msg
+                        )
                         _reject_action(conn, label, err, player_id, state)
                         continue
 
                     ability = abilities[ability_index]
 
-                    # validate tap cost 
-                    if cost_payment.get("tap") and permanent.get("tapped"):
-                        err = pdu.build_illegal_action("Permanent already tapped")
+                    # --- tap cost ---
+                    if cost_payment.get("tap"):
+                        if permanent.get("tapped"):
+                            err = pdu.build_error(
+                                msg.get("seq_num", 0),
+                                constants.ERROR_ILLEGAL_ACTION,
+                                "Permanent already tapped",
+                                msg
+                            )
+                            _reject_action(conn, label, err, player_id, state)
+                            continue
+                        permanent["tapped"] = True
+
+                    # --- mana cost (reuse SAME system as CAST_SPELL) ---
+                    try:
+                        mana.validate_and_pay(
+                            state,
+                            player_id,
+                            cost_payment.get("mana", {}),
+                            CARD_CATALOG,
+                            None
+                        )
+                    except Exception:
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_INSUFFICIENT_MANA,
+                            "Insufficient mana",
+                            msg
+                        )
                         _reject_action(conn, label, err, player_id, state)
                         continue
 
-                    # mana ability check
-                    def is_mana_ability(ability):
-                        return ability.get("type") == "mana"
-
-                    if is_mana_ability(ability):
-                        if cost_payment.get("tap"):
-                            permanent["tapped"] = True
-
-                        continue  # ✅ correct
-
-                    # must have priority 
-                    if state.get("priority_holder") != player_id:
-                        err = pdu.build_illegal_action("Player does not have priority")
-                        _reject_action(conn, label, err, player_id, state)
-                        continue   # ✅ FIXED
-
-                    # validate + pay mana using your system 
-                    ok, used_lands = validate_and_pay(
-                        state,
-                        player_id,
-                        cost_payment.get("mana", {}),
-                        CARD_CATALOG,
-                        None
-                    )
-
-                    if not ok:
-                        err = pdu.build_illegal_action("Invalid mana payment")
-                        _reject_action(conn, label, err, player_id, state)
-                        continue   # ✅ FIXED
-
-                    # apply tap cost for the source
-                    if cost_payment.get("tap"):
-                        permanent["tapped"] = True
-
-                    # push ability to stack 
-                    stack_obj = {
-                        "type": "ABILITY",
-                        "controller": controller,
-                        "source_id": source_id,
+                    #STACK ITEM — MATCHES CAST_SPELL STRUCTURE
+                    stack_item = {
+                        "type": "ABILITY",              # same key style
+                        "source_id": source_id,         # like card_id
                         "ability_index": ability_index,
-                        "targets": msg.get("targets", []),
-                        "effect": ability.get("effect"),
+                        "controller": player_id,
+                        "targets": targets,
                     }
 
-                    state["stack"].append(stack_obj)
+                    state["stack"].append(stack_item)
 
-                    # pass priority to opponent 
-                    next_player = "player_1" if player_id == "player_2" else "player_2"
-                    state["priority_holder"] = next_player
+                    # --- give priority back (same as CAST_SPELL) ---
+                    grant = pdu.build_priority_grant(state["_priority_seq"], player_id)
+                    send_pdu(conn, grant, label=label)
 
-                    # update priority sequence
-                    if state.get("_priority_seq") is not None:
-                        state["_priority_seq"] += 1
-                        grant = pdu.build_priority_grant(state["_priority_seq"], next_player)
-                        send_pdu(state["conns"][next_player], grant, label=f"{next_player}")
-
-                    continue   # ✅ REQUIRED
+                    continue
+    
 
                 # -----------------------------------------------------
                 # PLAY_LAND
