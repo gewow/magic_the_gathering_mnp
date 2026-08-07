@@ -284,6 +284,13 @@ def _clear_end_of_turn_state(state):
                 perm["summoning_sick"] = False
     return state
 
+def _reject_action(conn, label, err, player_id, state):
+    send_pdu(conn, err, label=label)
+
+    if state.get("priority_holder") == player_id and state.get("_priority_seq") is not None:
+        grant = pdu.build_priority_grant(state["_priority_seq"], player_id)
+        send_pdu(conn, grant, label=label)
+
 
 # ---------------------------------------------------------------------------
 # Triggered abilities (RFC Section 8.6)
@@ -856,7 +863,7 @@ def handle_client(conn, addr):
 
                     if card_id not in state["hands"].get(player_id, []):
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION, "That card is not in your hand", msg)
-                        _reject_action(conn, label, err, player_id)
+                        _reject_action(conn, label, err, player_id, state)
                         continue
                     
                     card_type = CARD_CATALOG.get(card_id, {}).get("card_type")
@@ -871,7 +878,7 @@ def handle_client(conn, addr):
                             err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_WRONG_PHASE, 
                                                   f"{card_id} can only be cast at sorcery speed "
                                                   f"your Main Phase, empty stack", msg)
-                            _reject_action(conn, label, err, player_id)
+                            _reject_action(conn, label, err, player_id, state)
                             continue
 
                     paid_ok, tapped = mana.validate_and_pay(state, player_id, mana_payment, CARD_CATALOG, card_id = card_id)
@@ -879,7 +886,7 @@ def handle_client(conn, addr):
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_INSUFFICIENT_MANA, 
                                                   f"mana payment cannot be paid from "
                                                   f"your untapped mana sources", msg)
-                        _reject_action(conn, label, err, player_id)
+                        _reject_action(conn, label, err, player_id, state)
                         continue
                         
                     stack_item = {
@@ -904,78 +911,101 @@ def handle_client(conn, addr):
                     _grant_priority_to(player_id)
                     continue
 
-                # -----------------------------------------------------
-                # ACTIVATE_ABILITY
-                # -----------------------------------------------------
-                if msg_type == "ACTIVATE_ABILITY":
-                    if player_id != state.get("priority_holder"):
-                        err = pdu.build_error(
-                            msg.get("seq_num", 0),
-                            constants.ERROR_NOT_YOUR_PRIORITY,
-                            "You do not hold priority",
-                            msg
-                        )
-                        send_pdu(conn, err, label=label)
-                        continue
-
-                    seq_err = _check_seq("priority", player_id, msg)
-                    if seq_err:
-                        _reject_stale(conn, label, msg, reissue_priority_to=player_id)
-                        continue
-
-                    ability_id = msg.get("ability_id")
+                #ACTIVATE_ABILITY handler
+                elif msg["type"] == "ACTIVATE_ABILITY":
                     source_id = msg.get("source_id")
-                    targets = msg.get("targets", [])
-                    mana_payment = msg.get("mana_payment", {})
+                    ability_index = msg.get("ability_index")
+                    cost_payment = msg.get("cost_payment", {})
 
-                    state, err_code = abilities.activate_ability(
+                    # validate required fields 
+                    if source_id is None or ability_index is None:
+                        err = pdu.build_illegal_action("Missing source_id or ability_index")
+                        _reject_action(conn, label, err, player_id, state)
+                        return
+
+                    # find permanent 
+                    controller, permanent = _find_permanent(state, source_id)
+                    if not permanent:
+                        err = pdu.build_illegal_action("Invalid source_id")
+                        _reject_action(conn, label, err, player_id, state)
+                        return
+
+                    # validate ability index 
+                    abilities = permanent.get("abilities", [])
+                    if ability_index < 0 or ability_index >= len(abilities):
+                        err = pdu.build_illegal_action("Invalid ability_index")
+                        _reject_action(conn, label, err, player_id, state)
+                        return
+
+                    ability = abilities[ability_index]
+
+                    #validate tap cost 
+                    if cost_payment.get("tap") and permanent.get("tapped"):
+                        err = pdu.build_illegal_action("Permanent already tapped")
+                        _reject_action(conn, label, err, player_id, state)
+                        return
+
+                    # mana ability check
+                    def is_mana_ability(ability):
+                        return ability.get("type") == "mana"
+
+                    if is_mana_ability(ability):
+                        # apply tap cost only
+                        if cost_payment.get("tap"):
+                            permanent["tapped"] = True
+
+                        # 🚨 no validate_and_pay
+                        # 🚨 no stack
+                        # 🚨 no priority check
+
+                        return
+
+                   
+                    # must have priority 
+                    if state.get("priority_holder") != player_id:
+                        err = pdu.build_illegal_action("Player does not have priority")
+                        _reject_action(conn, label, err, player_id, state)
+                        return
+
+                    # validate + pay mana using your system 
+                    ok, used_lands = validate_and_pay(
                         state,
                         player_id,
-                        source_id,
-                        ability_id,
-                        targets,
-                        mana_payment,
-                        CARD_CATALOG
+                        cost_payment.get("mana", {}),
+                        CARD_CATALOG,
+                        None  # ability, not a spell
                     )
 
-                    if err_code:
-                        err = pdu.build_error(
-                            msg.get("seq_num", 0),
-                            err_code,
-                            "ACTIVATE_ABILITY rejected",
-                            msg
-                        )
-                        _reject_action(conn, label, err, player_id)
-                        continue
+                    if not ok:
+                        err = pdu.build_illegal_action("Invalid mana payment")
+                        _reject_action(conn, label, err, player_id, state)
+                        return
 
-                    #PUSH TO STACK
-                    stack_item = {
-                        "stack_item_id": f"stk_{game_state.next_seq_num(state)}",
-                        "item_type": "ABILITY",
-                        "source": source_id,
-                        "ability_id": ability_id,
-                        "targets": targets,
-                        "controller": player_id,
+                    # apply tap cost for the source
+                    if cost_payment.get("tap"):
+                        permanent["tapped"] = True
+
+                    # push ability to stack 
+                    stack_obj = {
+                        "type": "ABILITY",
+                        "controller": controller,
+                        "source_id": source_id,
+                        "ability_index": ability_index,
+                        "targets": msg.get("targets", []),
+                        "effect": ability.get("effect"),
                     }
 
-                    state = priority.handle_stack_action(state, stack_item)
+                    state["stack"].append(stack_obj)
 
-                    push_msg = pdu.build_stack_push(
-                        game_state.next_seq_num(state),
-                        stack_item["stack_item_id"],
-                        "ABILITY",
-                        source_id,
-                        targets,
-                        player_id
-                    )
+                    # pass priority to opponent 
+                    next_player = "player_1" if player_id == "player_2" else "player_2"
+                    state["priority_holder"] = next_player
 
-                    broadcast(push_msg)
-
-                    send_personalized_state_to_all()
-
-                    #SAME PLAYER RETAINS PRIORITY
-                    _grant_priority_to(player_id)
-                    continue
+                    # update priority sequence
+                    if state.get("_priority_seq") is not None:
+                        state["_priority_seq"] += 1
+                        grant = pdu.build_priority_grant(state["_priority_seq"], next_player)
+                        send_pdu(state["conns"][next_player], grant, label=f"{next_player}")
 
                 # -----------------------------------------------------
                 # PLAY_LAND
@@ -992,36 +1022,30 @@ def handle_client(conn, addr):
                         _reject_stale(conn, label, msg, reissue_priority_to=player_id)
                         continue
 
-                    def _reject_action(conn, label, err, player_id):
-                        send_pdu(conn, err, label=label)
-                        if state.get("priority_holder") == player_id and state.get("_priority_seq") is not None:
-                            grant = pdu.build_priority_grant(state["_priority_seq"], player_id)
-                            send_pdu(conn, grant, label=label)
-
                     if (player_id != state.get("active_player") or state.get("phase") not in ("PRECOMBAT_MAIN", "POSTCOMBAT_MAIN")):
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_WRONG_PHASE,
                                               "Lands can only be played by the Active Player "
                                               "during a Main Phase", msg)
-                        _reject_action(conn, label, err, player_id)
+                        _reject_action(conn, label, err, player_id, state)
                         continue
 
                     if state.get("land_played_this_turn"):
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
                                               "A land has already been played this turn", msg)
-                        _reject_action(conn, label, err, player_id)
+                        _reject_action(conn, label, err, player_id, state)
                         continue
 
                     card_id = msg.get("card_id")
                     if card_id not in state["hands"].get(player_id, []):
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
                                               "That card is not in your hand", msg)
-                        _reject_action(conn, label, err, player_id)
+                        _reject_action(conn, label, err, player_id, state)
                         continue
 
                     if CARD_CATALOG.get(card_id, {}).get("card_type") != "Land":
                         err = pdu.build_error(msg.get("seq_num", 0), constants.ERROR_ILLEGAL_ACTION,
                                               f"{card_id} is not a Land", msg)
-                        _reject_action(conn, label, err, player_id)
+                        _reject_action(conn, label, err, player_id, state)
                         continue
 
                     state["hands"][player_id].remove(card_id)
@@ -1030,7 +1054,6 @@ def handle_client(conn, addr):
 
                     send_personalized_state_to_all()
                     _grant_priority_to(player_id)
-                    send_personalized_state_to_all()
                     continue
 
                 # -----------------------------------------------------
