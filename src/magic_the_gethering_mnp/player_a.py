@@ -9,13 +9,16 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import constants
 from client_state import MTGNPClient
 
-# Deck from MTGNP Examples.pdf Step 1
-PLAYER_A_DECK = [
-    "lightning_bolt_001", "lightning_bolt_002", "lightning_bolt_003",
-    "shock_001", "shock_002",
-    "goblin_guide_001",
-    "mountain_001", "mountain_002",
-]
+import json
+import os
+
+_CARDS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cards.json")
+with open(_CARDS_PATH, "r", encoding="utf-8") as f:
+    _ALL_CARDS = list(json.load(f).keys())
+
+# any subset between MIN_DECK_SIZE and MAX_DECK_SIZE works; 40 is a
+# reasonable constructed-deck size
+PLAYER_A_DECK = _ALL_CARDS[:40]
 
 
 def main() -> None:
