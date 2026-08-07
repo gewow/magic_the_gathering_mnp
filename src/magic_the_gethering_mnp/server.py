@@ -415,16 +415,19 @@ def advance_and_settle():
             return  # wait for a DECLARE_ATTACKERS PDU from the Active Player
 
         if current == "DECLARE_BLOCKERS":
-            return  # wait for a DECLARE_BLOCKERS PDU from the Non-Active Player
+            # If we somehow reached here without a window, open one
+            if not state.get("priority_open", False):
+                open_priority_window()
+            return
 
         if current == "ASSIGN_DAMAGE_ORDER":
             if not combat.needs_damage_order(state):
-                # RFC 9.5: "If no attacker is multiply-blocked, this
-                # step is skipped" -- entirely, no priority window.
                 from_phase = current
                 state = turn_manager.advance_phase(state)
                 broadcast_phase_transition(from_phase, state["phase"])
-                continue
+
+                open_priority_window()
+                return
 
             if not combat.has_all_damage_orders(state):
                 # RFC 9.5: implicitly requested by the PHASE_TRANSITION
@@ -902,6 +905,79 @@ def handle_client(conn, addr):
                     continue
 
                 # -----------------------------------------------------
+                # ACTIVATE_ABILITY
+                # -----------------------------------------------------
+                if msg_type == "ACTIVATE_ABILITY":
+                    if player_id != state.get("priority_holder"):
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_NOT_YOUR_PRIORITY,
+                            "You do not hold priority",
+                            msg
+                        )
+                        send_pdu(conn, err, label=label)
+                        continue
+
+                    seq_err = _check_seq("priority", player_id, msg)
+                    if seq_err:
+                        _reject_stale(conn, label, msg, reissue_priority_to=player_id)
+                        continue
+
+                    ability_id = msg.get("ability_id")
+                    source_id = msg.get("source_id")
+                    targets = msg.get("targets", [])
+                    mana_payment = msg.get("mana_payment", {})
+
+                    state, err_code = abilities.activate_ability(
+                        state,
+                        player_id,
+                        source_id,
+                        ability_id,
+                        targets,
+                        mana_payment,
+                        CARD_CATALOG
+                    )
+
+                    if err_code:
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            err_code,
+                            "ACTIVATE_ABILITY rejected",
+                            msg
+                        )
+                        _reject_action(conn, label, err, player_id)
+                        continue
+
+                    #PUSH TO STACK
+                    stack_item = {
+                        "stack_item_id": f"stk_{game_state.next_seq_num(state)}",
+                        "item_type": "ABILITY",
+                        "source": source_id,
+                        "ability_id": ability_id,
+                        "targets": targets,
+                        "controller": player_id,
+                    }
+
+                    state = priority.handle_stack_action(state, stack_item)
+
+                    push_msg = pdu.build_stack_push(
+                        game_state.next_seq_num(state),
+                        stack_item["stack_item_id"],
+                        "ABILITY",
+                        source_id,
+                        targets,
+                        player_id
+                    )
+
+                    broadcast(push_msg)
+
+                    send_personalized_state_to_all()
+
+                    #SAME PLAYER RETAINS PRIORITY
+                    _grant_priority_to(player_id)
+                    continue
+
+                # -----------------------------------------------------
                 # PLAY_LAND
                 # -----------------------------------------------------
                 if msg_type == "PLAY_LAND":
@@ -954,6 +1030,7 @@ def handle_client(conn, addr):
 
                     send_personalized_state_to_all()
                     _grant_priority_to(player_id)
+                    send_personalized_state_to_all()
                     continue
 
                 # -----------------------------------------------------
@@ -983,11 +1060,26 @@ def handle_client(conn, addr):
                     from_phase = state["phase"]
 
                     if not combat.has_attackers(state):
+                        # RFC 9.3: no attackers -> skip straight to
+                        # End of Combat, no priority window needed here
+                        # since nothing happened for anyone to respond to.
                         state["phase"] = "END_OF_COMBAT"
+                        broadcast_phase_transition(from_phase, state["phase"])
+                        advance_and_settle()
                     else:
-                        state = turn_manager.advance_phase(state)
-                    broadcast_phase_transition(from_phase, state["phase"])
-                    advance_and_settle()
+                        # RFC 9.3: after attackers are declared, open a
+                        # priority window BEFORE moving to Declare Blockers
+                        # -- both players get a chance to respond (e.g.
+                        # an instant) to the attack before blocks lock in.
+                        # We deliberately do NOT call advance_phase() here;
+                        # open_priority_window() opens the window on the
+                        # CURRENT phase (DECLARE_ATTACKERS), and the normal
+                        # PRIORITY_PASS -> STEP_END handling is what
+                        # advances us into DECLARE_BLOCKERS once both
+                        # players pass with an empty stack.
+                        open_priority_window()
+                        _grant_priority_to(state["active_player"])
+                        send_personalized_state_to_all()
                     continue
 
                 # -----------------------------------------------------
@@ -1015,17 +1107,15 @@ def handle_client(conn, addr):
                         continue
                     state = new_state
                     send_personalized_state_to_all()
-                    from_phase = state["phase"]
-                    state = turn_manager.advance_phase(state)
 
-                    if combat.needs_damage_order(state):
-                        broadcast_phase_transition(from_phase, state["phase"])
-                        advance_and_settle()
-
-                    else:
-                        state = turn_manager.advance_phase(state)
-                        broadcast_phase_transition(from_phase, state["phase"])
-                        advance_and_settle()
+                    # RFC 9.4: after blockers are declared, open a priority
+                    # window BEFORE moving to Assign Damage Order / Combat
+                    # Damage -- same reasoning as the attackers window above.
+                    # We stay on DECLARE_BLOCKERS for the window; the normal
+                    # STEP_END path (both pass, empty stack) is what carries
+                    # us into ASSIGN_DAMAGE_ORDER / COMBAT_DAMAGE afterward.
+                    open_priority_window()
+                    _grant_priority_to(state["active_player"])
                     continue
 
                 # -----------------------------------------------------
