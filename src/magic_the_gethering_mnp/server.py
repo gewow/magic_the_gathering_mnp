@@ -933,10 +933,13 @@ def handle_client(conn, addr):
 
                     source_id = msg.get("source_id")
                     ability_index = msg.get("ability_index")
-                    cost_payment = msg.get("cost_payment", {})
+                    mana_payment = msg.get("mana_payment", {})
+                    tap_cost = msg.get("tap", False)
                     targets = msg.get("targets", [])
 
-                    # --- validate required fields ---
+                    # -------------------------------------------------
+                    # Validate required fields
+                    # -------------------------------------------------
                     if source_id is None or ability_index is None:
                         err = pdu.build_error(
                             msg.get("seq_num", 0),
@@ -947,16 +950,19 @@ def handle_client(conn, addr):
                         _reject_action(conn, label, err, player_id, state)
                         continue
 
-                    # --- find permanent (inline, no helper needed) ---
+                    # -------------------------------------------------
+                    # Find source permanent
+                    # -------------------------------------------------
                     controller = None
                     permanent = None
+
                     for pid, perms in state["battlefield"].items():
                         for p in perms:
-                            if p.get("card_id") == source_id:
+                            if p.get("id") == source_id:
                                 controller = pid
                                 permanent = p
                                 break
-                        if permanent:
+                        if permanent is not None:
                             break
 
                     if permanent is None:
@@ -979,11 +985,13 @@ def handle_client(conn, addr):
                         _reject_action(conn, label, err, player_id, state)
                         continue
 
-                    # --- get ability from catalog ---
+                    # -------------------------------------------------
+                    # Get ability from catalog
+                    # -------------------------------------------------
                     card_def = CARD_CATALOG.get(source_id, {})
                     abilities = card_def.get("abilities", [])
 
-                    if ability_index >= len(abilities):
+                    if not isinstance(ability_index, int) or ability_index < 0 or ability_index >= len(abilities):
                         err = pdu.build_error(
                             msg.get("seq_num", 0),
                             constants.ERROR_ILLEGAL_ACTION,
@@ -994,30 +1002,93 @@ def handle_client(conn, addr):
                         continue
 
                     ability = abilities[ability_index]
+                    # -------------------------------------------------
+                    # Validate ability targets
+                    # -------------------------------------------------
+                    target_info = ability.get("targets", {})
+                    target_required = target_info.get("required", False)
 
-                    # --- tap cost ---
-                    if cost_payment.get("tap"):
-                        if permanent.get("tapped"):
+                    if target_required:
+                        if not targets:
                             err = pdu.build_error(
                                 msg.get("seq_num", 0),
                                 constants.ERROR_ILLEGAL_ACTION,
-                                "Permanent already tapped",
+                                "Ability requires a target",
                                 msg
                             )
                             _reject_action(conn, label, err, player_id, state)
                             continue
-                        permanent["tapped"] = True
 
-                    # --- mana cost (reuse SAME system as CAST_SPELL) ---
-                    try:
-                        mana.validate_and_pay(
-                            state,
-                            player_id,
-                            cost_payment.get("mana", {}),
-                            CARD_CATALOG,
-                            None
+                        targets_legal = all(
+                            priority._is_ability_target_legal(
+                                state,
+                                ability,
+                                target,
+                                player_id
+                            )
+                            for target in targets
                         )
-                    except Exception:
+
+                        if not targets_legal:
+                            err = pdu.build_error(
+                                msg.get("seq_num", 0),
+                                constants.ERROR_ILLEGAL_ACTION,
+                                "Illegal ability target",
+                                msg
+                            )
+                            _reject_action(conn, label, err, player_id, state)
+                            continue
+
+                    else:
+                        # An ability that does not require targets should
+                        # not receive target objects from the client.
+                        if targets:
+                            err = pdu.build_error(
+                                msg.get("seq_num", 0),
+                                constants.ERROR_ILLEGAL_ACTION,
+                                "This ability does not require a target",
+                                msg
+                            )
+                            _reject_action(conn, label, err, player_id, state)
+                            continue
+
+                    # -------------------------------------------------
+                    # Validate tap cost BEFORE making any state change
+                    # -------------------------------------------------
+                    if tap_cost and permanent.get("tapped"):
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_ILLEGAL_ACTION,
+                            "Permanent already tapped",
+                            msg
+                        )
+                        _reject_action(conn, label, err, player_id, state)
+                        continue
+
+                    # -------------------------------------------------
+                    # Enforce summoning sickness for tap-cost abilities
+                    # (RFC sample doc: a creature MUST NOT activate tap
+                    # abilities until the controller's next Untap Step)
+                    # -------------------------------------------------
+                    if tap_cost and permanent.get("summoning_sick"):
+                        err = pdu.build_error(
+                            msg.get("seq_num", 0),
+                            constants.ERROR_ILLEGAL_ACTION,
+                            "Permanent has summoning sickness",
+                            msg
+                        )
+                        _reject_action(conn, label, err, player_id, state)
+                        continue
+
+                    # -------------------------------------------------
+                    # Validate/pay mana FIRST
+                    # -------------------------------------------------
+                    paid_ok, tapped = mana.validate_and_pay(
+                        state, player_id, mana_payment, CARD_CATALOG,
+                        card_id=None, expected_cost=ability.get("cost", {}).get("mana", {})
+                    )
+
+                    if not paid_ok:
                         err = pdu.build_error(
                             msg.get("seq_num", 0),
                             constants.ERROR_INSUFFICIENT_MANA,
@@ -1027,20 +1098,48 @@ def handle_client(conn, addr):
                         _reject_action(conn, label, err, player_id, state)
                         continue
 
-                    #STACK ITEM — MATCHES CAST_SPELL STRUCTURE
+                    # -------------------------------------------------
+                    # Apply tap cost only after mana payment succeeds
+                    # -------------------------------------------------
+                    if tap_cost:
+                        permanent["tapped"] = True
+
+                    # -------------------------------------------------
+                    # Create stack item
+                    # -------------------------------------------------
                     stack_item = {
-                        "type": "ABILITY",              # same key style
-                        "source_id": source_id,         # like card_id
+                        "stack_item_id": f"stk_{game_state.next_seq_num(state)}",
+                        "item_type": "ABILITY",
+                        "source_id": source_id,
                         "ability_index": ability_index,
                         "controller": player_id,
                         "targets": targets,
                     }
 
-                    state["stack"].append(stack_item)
+                    # -------------------------------------------------
+                    # Put ability on stack and reset priority window
+                    # -------------------------------------------------
+                    state = priority.handle_stack_action(state, stack_item)
 
-                    # --- give priority back (same as CAST_SPELL) ---
-                    grant = pdu.build_priority_grant(state["_priority_seq"], player_id)
-                    send_pdu(conn, grant, label=label)
+                    # -------------------------------------------------
+                    # Broadcast STACK_PUSH
+                    # -------------------------------------------------
+                    push_msg = pdu.build_stack_push(
+                        game_state.next_seq_num(state),
+                        stack_item["stack_item_id"],
+                        "ABILITY",
+                        source_id,
+                        targets,
+                        player_id
+                    )
+
+                    broadcast(push_msg)
+                    send_personalized_state_to_all()
+
+                    # -------------------------------------------------
+                    # Activating player retains priority
+                    # -------------------------------------------------
+                    _grant_priority_to(player_id)
 
                     continue
     
@@ -1139,8 +1238,6 @@ def handle_client(conn, addr):
                         # advances us into DECLARE_BLOCKERS once both
                         # players pass with an empty stack.
                         open_priority_window()
-                        _grant_priority_to(state["active_player"])
-                        send_personalized_state_to_all()
                     continue
 
                 # -----------------------------------------------------
@@ -1176,7 +1273,6 @@ def handle_client(conn, addr):
                     # STEP_END path (both pass, empty stack) is what carries
                     # us into ASSIGN_DAMAGE_ORDER / COMBAT_DAMAGE afterward.
                     open_priority_window()
-                    _grant_priority_to(state["active_player"])
                     continue
 
                 # -----------------------------------------------------

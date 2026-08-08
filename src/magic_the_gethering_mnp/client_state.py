@@ -459,6 +459,28 @@ class MTGNPClient:
         else:
             self.send_priority_pass()
 
+    def _prompt_mana_payment(self) -> dict:
+
+        raw = self._prompt_input(
+            "Mana to pay (comma-separated symbols, e.g. R,generic,generic — empty if none): "
+        )
+        payment: dict[str, int] = {}
+        if not raw:
+            return payment
+
+        valid_symbols = {"W", "U", "B", "R", "G", "generic"}
+        for token in raw.split(","):
+            symbol = token.strip()
+            if not symbol:
+                continue
+            if symbol not in valid_symbols:
+                print(f"  (ignoring unrecognized mana symbol: {symbol!r})")
+                continue
+            payment[symbol] = payment.get(symbol, 0) + 1
+
+        return payment
+
+
     def _prompt_activate_ability(self) -> None:
         source_id = self._prompt_input("Source permanent id: ")
         if not source_id:
@@ -468,9 +490,10 @@ class MTGNPClient:
         targets_raw = self._prompt_input("Targets (comma-separated, or empty): ")
         targets = [t.strip() for t in targets_raw.split(",") if t.strip()]
         tap_raw = self._prompt_input("Tap as cost? (y/n): ")
-        cost = {"tap": tap_raw.lower() in ("y", "yes", "1"), "mana": {}}
+        tap = tap_raw.lower() in ("y", "yes", "1")
+        mana_payment = self._prompt_mana_payment()
         self._send(pdu.build_activate_ability(
-            self.action_token, source_id, int(idx), targets, cost,
+            self.action_token, source_id, int(idx), targets, mana_payment, tap,
         ))
 
     def _prompt_declare_attackers(self) -> None:
@@ -520,11 +543,10 @@ class MTGNPClient:
             cards_to_bottom: list[str] = []
 
             if keep and mulligan_count:
-                raw_bottom = self._prompt_input(raw_bottom = self._prompt_input(
-                    "Card id(s) to bottom (comma-separated, empty if none): ",
-                ))
+                raw_bottom = self._prompt_input(
+                    "Card id(s) to bottom (comma-separated, empty if none): "
+                )
                 cards_to_bottom = [c.strip() for c in raw_bottom.split(",") if c.strip()]
-
             self.send_mulligan_choice(keep, cards_to_bottom)
             self.mulligan_submitted = True
 

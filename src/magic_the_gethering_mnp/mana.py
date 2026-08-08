@@ -35,7 +35,9 @@ def _payment_matches_cost(mana_payment: dict, mana_cost:dict) -> bool:
     return True
 
 
-def validate_and_pay(state: dict, player_id: str, mana_payment: dict, card_catalog: dict, card_id: str | None = None) -> tuple[bool, list[str]]:
+def validate_and_pay(state: dict, player_id: str, mana_payment: dict,
+                      card_catalog: dict, card_id: str | None = None,
+                      expected_cost: dict | None = None) -> tuple[bool, list[str]]:
     mana_pay = dict(mana_payment or {})
     bFlag = True
     ret = (False, [])
@@ -46,6 +48,9 @@ def validate_and_pay(state: dict, player_id: str, mana_payment: dict, card_catal
         card = card_catalog.get(card_id, {})
         mana_cost = card.get("mana_cost", {})
         if not _payment_matches_cost(mana_payment, mana_cost):
+            return (False, [])
+    elif expected_cost is not None:
+        if not _payment_matches_cost(mana_payment, expected_cost):
             return (False, [])
 
     generic = mana_pay.pop("generic", 0)

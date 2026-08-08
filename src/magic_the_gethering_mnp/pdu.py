@@ -47,14 +47,15 @@ def build_cast_spell(seq_num: int, card_id: str, targets: list[str],
         "mana_payment": mana_payment,
     }
 
-def build_activate_ability(seq_num: int, source_id: str, ability_index:int, targets: list[str], cost_payment: dict) -> dict:
+def build_activate_ability(seq_num: int, source_id: str, ability_index: int, targets: list[str], mana_payment: dict, tap: bool = False) -> dict:
     return {
         "type": "ACTIVATE_ABILITY",
         "seq_num": seq_num,
         "source_id": source_id,
         "ability_index": ability_index,
         "targets": targets,
-        "cost_payment": cost_payment,
+        "mana_payment": mana_payment,
+        "tap": tap,
     }
 
 def build_declare_attackers(seq_num: int, attackers: list[dict]) -> dict:
